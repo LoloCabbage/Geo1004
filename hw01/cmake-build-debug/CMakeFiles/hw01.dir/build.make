@@ -92,6 +92,10 @@ hw01_EXTERNAL_OBJECTS =
 
 hw01: CMakeFiles/hw01.dir/main.cpp.o
 hw01: CMakeFiles/hw01.dir/build.make
+hw01: /usr/lib/x86_64-linux-gnu/libgmp.so
+hw01: /usr/lib/x86_64-linux-gnu/libgmpxx.so
+hw01: /usr/lib/x86_64-linux-gnu/libmpfr.so
+hw01: /usr/lib/x86_64-linux-gnu/libgmp.so
 hw01: CMakeFiles/hw01.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable hw01"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hw01.dir/link.txt --verbose=$(VERBOSE)

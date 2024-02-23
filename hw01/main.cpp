@@ -9,7 +9,7 @@
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/linear_least_squares_fitting_3.h>
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel; // import ... as kernel
 typedef CGAL::Exact_predicates_tag Tag;
 struct FaceInfo {
     bool interior, processed;
@@ -24,7 +24,7 @@ typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo, Kernel, FaceBase> Fa
 typedef CGAL::Triangulation_data_structure_2<VertexBase, FaceBaseWithInfo> TriangulationDataStructure;
 typedef CGAL::Constrained_Delaunay_triangulation_2<Kernel, TriangulationDataStructure, Tag> Triangulation;
 
-const std::string input_file = "/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/NL.IMBAG.Pand.0503100000032914-0.obj"; // the faculty building
+const std::string input_file = "/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/NL.IMBAG.Pand.0503100000020110-0.obj"; // the faculty building
 const std::string output_file = "/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/faculty.obj";
 
 struct Vertex {
@@ -32,7 +32,7 @@ struct Vertex {
 };
 
 struct Face {
-    std::list<int> boundary; // ids of vertices vector
+    std::list<int> boundary; // ids of vertices vector, boundary = []
     Kernel::Plane_3 best_plane;
     Triangulation triangulation;
 };
@@ -43,63 +43,64 @@ int main(int argc, const char * argv[]) {
     std::vector<Face> faces;
 
     // Read file
-    std::ifstream input_stream;
+    std::ifstream input_stream; // stream for input file
     input_stream.open(input_file);
     if (input_stream.is_open()) {
         std::string line;
 
         // Parse line by line
         while (getline(input_stream, line)) {
-//      std::cout << line << std::endl;
+            std::cout << line << std::endl;
 
             std::istringstream line_stream(line);
-            char line_type;
+            char line_type; // output the char type in order
             line_stream >> line_type;
 
-            // Vertex
+            // Vertex: store all the coordination into vertices
             if (line_type == 'v') {
-                vertices.emplace_back();
-                double x, y, z;
+                vertices.emplace_back(); // append a new vertex
+                double x, y, z; // output the double type in order
                 line_stream >> x >> y >> z;
-                vertices.back().x = x;
+                vertices.back().x = x; //.back() returns the last element of the vector = append
                 vertices.back().y = y;
                 vertices.back().z = z;
             }
 
-            // Face
+            // Face: store all the vertices into faces
             if (line_type == 'f') {
                 faces.emplace_back();
                 int v;
+                // keep looping until the end of the line
                 while (!line_stream.eof()) {
                     line_stream >> v;
-                    faces.back().boundary.emplace_back(v-1);
+                    faces.back().boundary.emplace_back(v-1);// v-1 because the index starts from 0
                 }
             }
 
         }
     }
 
-    // Print vertices
-//  int i = 0;
-//  for (auto const &vertex: vertices) {
-//    std::cout << "Vertex " << i++ << ": " << "(" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
-//  }
+//     Print vertices
+  int i = 0;
+  for (auto const &vertex: vertices) {
+    std::cout << "Vertex " << i++ << ": " << "(" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
+  }
 
-    // Print faces
-//  i = 0;
-//  for (auto const &face: faces) {
-//    std::cout << "Face " << i++ << ": ";
-//    for (auto const &vertex: face.boundary) std::cout << " " << vertex;
-//    std::cout << std::endl;
-//  }
+//     Print faces
+  i = 0;
+  for (auto const &face: faces) {
+    std::cout << "Face " << i++ << ": ";
+    for (auto const &vertex: face.boundary) std::cout << " " << vertex;
+    std::cout << std::endl;
+  }
 
-    // Best fitting planes (to do)
-
-    // Triangulate faces (to do)
-
-    // Label triangulation (to do)
-
-    // Export triangles (to do)
+//     Best fitting planes (to do)
+//
+//     Triangulate faces (to do)
+//
+//     Label triangulation (to do)
+//
+//     Export triangles (to do)
 
     return 0;
 }

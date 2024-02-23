@@ -886,7 +886,8 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/type_traits.h /usr/include/CGAL/use.h \
  /usr/include/CGAL/Real_embeddable_traits.h \
  /usr/include/CGAL/Fraction_traits.h /usr/include/CGAL/Rational_traits.h \
- /usr/include/CGAL/is_convertible.h \
+ /usr/include/CGAL/is_convertible.h /usr/include/gmpxx.h \
+ /usr/include/x86_64-linux-gnu/gmp.h \
  /usr/include/CGAL/Scalar_factor_traits.h \
  /usr/include/CGAL/Algebraic_extension_traits.h \
  /usr/include/c++/11/numeric /usr/include/c++/11/bits/stl_numeric.h \
@@ -908,6 +909,13 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/Modular_traits.h \
  /usr/include/CGAL/Modular_arithmetic/Residue_type.h \
  /usr/include/CGAL/tss.h /usr/include/CGAL/long_long.h \
+ /usr/include/CGAL/gmpxx.h /usr/include/CGAL/mpz_class.h \
+ /usr/include/mpfr.h /usr/include/CGAL/gmpxx_coercion_traits.h \
+ /usr/include/CGAL/Residue.h /usr/include/CGAL/Quotient.h \
+ /usr/include/CGAL/mpq_class.h \
+ /usr/include/CGAL/GMPXX_arithmetic_kernel.h \
+ /usr/include/CGAL/Arithmetic_kernel/Arithmetic_kernel_base.h \
+ /usr/include/CGAL/Get_arithmetic_kernel.h \
  /usr/include/CGAL/number_utils_classes.h \
  /usr/include/CGAL/kernel_basic.h /usr/include/CGAL/kernel_config.h \
  /usr/include/CGAL/kernel_assertions.h \
@@ -1490,7 +1498,6 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/Homogeneous/PointH2.h \
  /usr/include/CGAL/Homogeneous/VectorH2.h \
  /usr/include/CGAL/Kernel_d/Cartesian_const_iterator_d.h \
- /usr/include/CGAL/Quotient.h \
  /usr/include/CGAL/Homogeneous/predicates_on_pointsH2.h \
  /usr/include/CGAL/Homogeneous/Iso_rectangleH2.h \
  /usr/include/CGAL/Homogeneous/LineH2.h \
@@ -1522,7 +1529,6 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/Sqrt_extension/Fraction_traits.h \
  /usr/include/CGAL/Sqrt_extension/Coercion_traits.h \
  /usr/include/CGAL/Sqrt_extension/Modular_traits.h \
- /usr/include/CGAL/Residue.h \
  /usr/include/CGAL/Sqrt_extension/Scalar_factor_traits.h \
  /usr/include/CGAL/Sqrt_extension/Algebraic_extension_traits.h \
  /usr/include/CGAL/Sqrt_extension/Chinese_remainder_traits.h \
@@ -1530,7 +1536,6 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/extended_euclidean_algorithm.h \
  /usr/include/CGAL/Sqrt_extension/io.h \
  /usr/include/CGAL/Sqrt_extension/Get_arithmetic_kernel.h \
- /usr/include/CGAL/Get_arithmetic_kernel.h \
  /usr/include/CGAL/Sqrt_extension/convert_to_bfi.h \
  /usr/include/CGAL/convert_to_bfi.h /usr/include/CGAL/Cache.h \
  /usr/include/CGAL/function_objects.h \
@@ -1538,7 +1543,6 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/CGAL/Sqrt_extension/Eigen_NumTraits.h \
  /usr/include/CGAL/MP_Float_impl.h \
  /usr/include/CGAL/MP_Float_arithmetic_kernel.h \
- /usr/include/CGAL/Arithmetic_kernel/Arithmetic_kernel_base.h \
  /usr/include/CGAL/Lazy_exact_nt.h /usr/include/CGAL/Handle.h \
  /usr/include/CGAL/Lazy.h /usr/include/CGAL/min_max_n.h \
  /usr/include/CGAL/Default.h /usr/include/CGAL/is_iterator.h \
@@ -1646,7 +1650,6 @@ CMakeFiles/hw01.dir/main.cpp.o: \
  /usr/include/boost/math/special_functions/detail/gamma_inva.hpp \
  /usr/include/boost/math/special_functions/erf.hpp \
  /usr/include/boost/math/special_functions/detail/erf_inv.hpp \
- /usr/include/x86_64-linux-gnu/gmp.h /usr/include/mpfr.h \
  /usr/include/CGAL/BOOST_MP_arithmetic_kernel.h /usr/include/CGAL/Gmpz.h \
  /usr/include/CGAL/Gmp_coercion_traits.h \
  /usr/include/CGAL/GMP/Gmpz_type.h /usr/include/CGAL/gmp.h \

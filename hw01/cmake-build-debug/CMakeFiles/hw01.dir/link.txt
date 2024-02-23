@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/hw01.dir/main.cpp.o -o hw01 
+/usr/bin/c++ -g CMakeFiles/hw01.dir/main.cpp.o -o hw01  /usr/lib/x86_64-linux-gnu/libgmp.so /usr/lib/x86_64-linux-gnu/libgmpxx.so /usr/lib/x86_64-linux-gnu/libmpfr.so /usr/lib/x86_64-linux-gnu/libgmp.so 

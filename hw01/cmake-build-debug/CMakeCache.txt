@@ -261,6 +261,9 @@ GMPXX_INCLUDE_DIR:PATH=/usr/include
 //Path to the GMPXX library
 GMPXX_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libgmpxx.so
 
+//The directory containing a CMake configuration file for GMP.
+GMP_DIR:PATH=GMP_DIR-NOTFOUND
+
 //The directory containing the GMP header files
 GMP_INCLUDE_DIR:PATH=/usr/include/x86_64-linux-gnu
 
