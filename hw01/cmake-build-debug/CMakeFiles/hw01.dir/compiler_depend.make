@@ -193,6 +193,39 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
+  /usr/include/c++/11/filesystem \
+  /usr/include/c++/11/bits/fs_fwd.h \
+  /usr/include/c++/11/chrono \
+  /usr/include/c++/11/ratio \
+  /usr/include/c++/11/limits \
+  /usr/include/c++/11/ctime \
+  /usr/include/c++/11/bits/parse_numbers.h \
+  /usr/include/c++/11/bits/fs_path.h \
+  /usr/include/c++/11/utility \
+  /usr/include/c++/11/bits/stl_relops.h \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/bits/unique_ptr.h \
+  /usr/include/c++/11/tuple \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/bits/uses_allocator.h \
+  /usr/include/c++/11/bits/invoke.h \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/bits/quoted_string.h \
+  /usr/include/c++/11/codecvt \
+  /usr/include/c++/11/ext/concurrence.h \
+  /usr/include/c++/11/bits/shared_ptr.h \
+  /usr/include/c++/11/bits/shared_ptr_base.h \
+  /usr/include/c++/11/bits/allocated_ptr.h \
+  /usr/include/c++/11/bits/refwrap.h \
+  /usr/include/c++/11/ext/aligned_buffer.h \
+  /usr/include/c++/11/bits/fs_dir.h \
+  /usr/include/c++/11/bits/fs_ops.h \
   /usr/include/CGAL/Exact_predicates_inexact_constructions_kernel.h \
   /usr/include/CGAL/Simple_cartesian.h \
   /usr/include/CGAL/Cartesian/Cartesian_base.h \
@@ -367,8 +400,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/boost/predef/hardware/simd/ppc/versions.h \
   /usr/include/boost/predef/version.h \
   /usr/include/c++/11/algorithm \
-  /usr/include/c++/11/utility \
-  /usr/include/c++/11/bits/stl_relops.h \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/algorithmfwd.h \
   /usr/include/c++/11/bits/stl_heap.h \
@@ -376,14 +407,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/c++/11/bits/uniform_int_dist.h \
   /usr/include/c++/11/pstl/glue_algorithm_defs.h \
   /usr/include/c++/11/functional \
-  /usr/include/c++/11/tuple \
-  /usr/include/c++/11/array \
-  /usr/include/c++/11/bits/uses_allocator.h \
-  /usr/include/c++/11/bits/invoke.h \
-  /usr/include/c++/11/bits/refwrap.h \
   /usr/include/c++/11/bits/std_function.h \
   /usr/include/c++/11/unordered_map \
-  /usr/include/c++/11/ext/aligned_buffer.h \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
@@ -397,13 +422,7 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/c++/11/bits/unordered_set.h \
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
-  /usr/include/c++/11/bits/unique_ptr.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
-  /usr/include/c++/11/chrono \
-  /usr/include/c++/11/ratio \
-  /usr/include/c++/11/limits \
-  /usr/include/c++/11/ctime \
-  /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/atomic \
   /usr/include/c++/11/bits/atomic_base.h \
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
@@ -416,15 +435,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/CGAL/Origin.h \
   /usr/include/CGAL/Origin_impl.h \
   /usr/include/CGAL/Profile_counter.h \
-  /usr/include/c++/11/iomanip \
-  /usr/include/c++/11/locale \
-  /usr/include/c++/11/bits/locale_facets_nonio.h \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
-  /usr/include/libintl.h \
-  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
-  /usr/include/c++/11/bits/locale_conv.h \
-  /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
@@ -1199,10 +1209,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
-  /usr/include/c++/11/bits/shared_ptr.h \
-  /usr/include/c++/11/bits/shared_ptr_base.h \
-  /usr/include/c++/11/bits/allocated_ptr.h \
-  /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
@@ -2341,6 +2347,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
   /usr/include/boost/move/algo/detail/pdqsort.hpp \
   /usr/include/boost/intrusive/detail/minimal_less_equal_header.hpp \
   /usr/include/CGAL/Triangulation_face_base_with_info_2.h \
+  /usr/include/CGAL/Projection_traits_xy_3.h \
+  /usr/include/CGAL/Kernel_23/internal/Projection_traits_3.h \
   /usr/include/CGAL/linear_least_squares_fitting_3.h \
   /usr/include/CGAL/license/Principal_component_analysis.h \
   /usr/include/CGAL/linear_least_squares_fitting_points_3.h \
@@ -2366,11 +2374,17 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Default_diagonalize_traits.h:
 
-/usr/include/boost/variant/static_visitor.hpp:
+/usr/include/CGAL/linear_least_squares_fitting_tetrahedra_3.h:
 
-/usr/include/boost/type_index/stl_type_index.hpp:
+/usr/include/CGAL/linear_least_squares_fitting_cuboids_3.h:
 
-/usr/include/boost/variant/detail/make_variant_list.hpp:
+/usr/include/CGAL/Subiterator.h:
+
+/usr/include/CGAL/linear_least_squares_fitting_segments_3.h:
+
+/usr/include/CGAL/Kernel_d/Linear_algebraCd_impl.h:
+
+/usr/include/CGAL/Kernel_d/Matrix__.h:
 
 /usr/include/boost/type_traits/is_constructible.hpp:
 
@@ -2534,8 +2548,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/mpl/aux_/front_impl.hpp:
 
-/usr/include/CGAL/linear_least_squares_fitting_cuboids_3.h:
-
 /usr/include/boost/mpl/aux_/preprocessed/gcc/plus.hpp:
 
 /usr/include/CGAL/Distance_3/internal/squared_distance_utils_3.h:
@@ -2545,12 +2557,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/mpl/plus.hpp:
 
 /usr/include/boost/mpl/vector/aux_/iterator.hpp:
-
-/usr/include/boost/mpl/vector/aux_/vector0.hpp:
-
-/usr/include/boost/mpl/joint_view.hpp:
-
-/usr/include/CGAL/Bbox_3.h:
 
 /usr/include/boost/mpl/vector/aux_/push_back.hpp:
 
@@ -2575,10 +2581,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Intersections_3/Iso_cuboid_3_Sphere_3.h:
 
 /usr/include/boost/move/iterator.hpp:
-
-/usr/include/boost/variant/apply_visitor.hpp:
-
-/usr/include/boost/mpl/vector/vector0.hpp:
 
 /usr/include/boost/fusion/support/detail/index_sequence.hpp:
 
@@ -2627,10 +2629,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/c++/11/bits/list.tcc:
 
 /usr/include/boost/fusion/mpl/insert_range.hpp:
-
-/usr/include/boost/move/adl_move_swap.hpp:
-
-/usr/include/boost/mpl/list/aux_/preprocessed/plain/list10.hpp:
 
 /usr/include/boost/fusion/view/detail/strictest_traversal.hpp:
 
@@ -2967,6 +2965,12 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/range/reverse_iterator.hpp:
 
 /usr/include/c++/11/bits/std_abs.h:
+
+/usr/include/boost/mpl/vector/aux_/vector0.hpp:
+
+/usr/include/boost/mpl/joint_view.hpp:
+
+/usr/include/CGAL/Bbox_3.h:
 
 /usr/include/boost/mpl/vector/aux_/include_preprocessed.hpp:
 
@@ -3322,79 +3326,35 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/static_assert.hpp:
 
-/usr/include/boost/mpl/aux_/config/intel.hpp:
+/usr/include/CGAL/Kernel/global_functions_2.h:
 
-/usr/include/boost/predef/architecture/x86.h:
+/usr/include/boost/type_traits/is_function.hpp:
 
-/usr/include/c++/11/bits/basic_string.h:
+/usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:
 
-/usr/include/CGAL/Cartesian_converter_fwd.h:
+/usr/include/boost/preprocessor/array/data.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+/usr/include/boost/fusion/adapted/mpl/mpl_iterator.hpp:
 
-/usr/include/boost/predef/architecture/arm.h:
+/usr/include/boost/type_traits/remove_reference.hpp:
 
-/usr/include/boost/preprocessor/arithmetic/detail/div_base.hpp:
+/usr/include/boost/math/special_functions/gamma.hpp:
 
-/usr/include/CGAL/Distance_2/Line_2_Line_2.h:
+/usr/include/boost/move/algo/detail/insertion_sort.hpp:
 
-/usr/include/c++/11/bits/sstream.tcc:
+/usr/include/boost/type_traits/is_rvalue_reference.hpp:
 
-/usr/include/boost/mpl/same_as.hpp:
+/usr/include/boost/type_traits/add_rvalue_reference.hpp:
 
-/usr/include/CGAL/Kernel_d/Linear_algebraCd_impl.h:
+/usr/include/boost/type_traits/is_destructible.hpp:
 
-/usr/include/boost/predef/architecture/parisc.h:
+/usr/include/boost/type_traits/add_cv.hpp:
 
-/usr/include/boost/predef/architecture/mips.h:
+/usr/include/c++/11/tr1/bessel_function.tcc:
 
-/usr/include/CGAL/Algebraic_structure_traits.h:
+/usr/include/boost/multiprecision/detail/atomic.hpp:
 
-/usr/include/boost/range/functions.hpp:
-
-/usr/include/CGAL/Filtered_kernel/internal/Static_filters/Static_filters.h:
-
-/usr/include/boost/predef/language.h:
-
-/usr/include/boost/multiprecision/cpp_int/comparison.hpp:
-
-/usr/include/boost/random/lognormal_distribution.hpp:
-
-/usr/include/boost/predef/make.h:
-
-/usr/include/boost/mpl/aux_/numeric_cast_utils.hpp:
-
-/usr/include/boost/predef.h:
-
-/usr/include/boost/mpl/list/aux_/tag.hpp:
-
-/usr/include/boost/predef/architecture/ptx.h:
-
-/usr/include/boost/type_traits/has_dereference.hpp:
-
-/usr/include/c++/11/string_view:
-
-/usr/include/c++/11/clocale:
-
-/usr/include/CGAL/functional.h:
-
-/usr/include/boost/preprocessor/seq/enum.hpp:
-
-/usr/include/CGAL/aff_transformation_tags_impl.h:
-
-/usr/include/boost/fusion/support/sequence_base.hpp:
-
-/usr/include/boost/mpl/list/aux_/push_back.hpp:
-
-/usr/include/boost/type_traits/type_identity.hpp:
-
-/usr/include/boost/predef/architecture/x86/64.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
-
-/usr/include/boost/move/detail/meta_utils_core.hpp:
-
-/usr/include/boost/mpl/list/list10.hpp:
+/usr/include/boost/type_traits/declval.hpp:
 
 /usr/include/CGAL/export/CGAL.h:
 
@@ -3408,21 +3368,7 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/fusion/mpl/begin.hpp:
 
-/usr/include/boost/predef/architecture/m68k.h:
-
-/usr/include/CGAL/basic_classes.h:
-
 /usr/include/boost/config/helper_macros.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
-
-/usr/include/x86_64-linux-gnu/gnu/stubs.h:
-
-/usr/include/boost/mpl/long_fwd.hpp:
-
-/usr/include/boost/preprocessor/logical/and.hpp:
-
-/usr/include/boost/predef/language/cuda.h:
 
 /usr/include/boost/preprocessor/arithmetic/mod.hpp:
 
@@ -3432,6 +3378,52 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/c++/11/bits/locale_conv.h:
 
+/usr/include/boost/predef/language/cuda.h:
+
+/usr/include/boost/mpl/aux_/numeric_cast_utils.hpp:
+
+/usr/include/boost/mpl/list/aux_/front.hpp:
+
+/usr/include/boost/predef/hardware.h:
+
+/usr/include/boost/detail/container_fwd.hpp:
+
+/usr/include/boost/config/stdlib/libstdcpp3.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+
+/usr/include/boost/predef/architecture/arm.h:
+
+/usr/include/boost/preprocessor/arithmetic/detail/div_base.hpp:
+
+/usr/include/CGAL/Distance_2/Line_2_Line_2.h:
+
+/usr/include/c++/11/bits/sstream.tcc:
+
+/usr/include/boost/mpl/same_as.hpp:
+
+/usr/include/c++/11/cwctype:
+
+/usr/include/c++/11/bits/fs_ops.h:
+
+/usr/include/boost/predef/platform/windows_system.h:
+
+/usr/include/boost/detail/basic_pointerbuf.hpp:
+
+/usr/include/c++/11/bits/quoted_string.h:
+
+/usr/include/boost/fusion/view/transform_view/detail/value_at_impl.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
+
+/usr/include/boost/range/iterator.hpp:
+
+/usr/include/boost/mpl/assert.hpp:
+
+/usr/include/CGAL/Intersections_3/Sphere_3_Sphere_3.h:
+
 /usr/include/CGAL/Distance_2/internal/squared_distance_utils_2.h:
 
 /usr/include/boost/type_traits/is_copy_constructible.hpp:
@@ -3440,25 +3432,31 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/config/no_tr1/complex.hpp:
 
-/usr/include/boost/mpl/list/aux_/front.hpp:
+/usr/include/c++/11/bits/locale_facets_nonio.h:
 
-/usr/include/boost/predef/hardware.h:
+/usr/include/boost/numeric/conversion/detail/conversion_traits.hpp:
 
-/usr/include/boost/detail/container_fwd.hpp:
+/usr/include/boost/type_traits/has_bit_and_assign.hpp:
 
-/usr/include/CGAL/Intersections_3/Line_3_Sphere_3.h:
+/usr/include/c++/11/bits/stl_relops.h:
 
-/usr/include/boost/config/stdlib/libstdcpp3.hpp:
+/usr/include/c++/11/bits/parse_numbers.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
+/usr/include/boost/math/special_functions/hypot.hpp:
 
-/usr/include/boost/mpl/push_front_fwd.hpp:
+/usr/include/boost/mpl/multiplies.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/time64.h:
+/usr/include/c++/11/ratio:
 
-/usr/include/boost/predef/language/stdcpp.h:
+/usr/include/boost/mpl/aux_/pop_back_impl.hpp:
 
-/usr/include/c++/11/cwctype:
+/usr/include/boost/mpl/aux_/preprocessed/gcc/iter_fold_impl.hpp:
+
+/usr/include/endian.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
+
+/usr/include/boost/mpl/minus.hpp:
 
 /usr/include/c++/11/bits/stl_bvector.h:
 
@@ -3468,19 +3466,11 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
+/usr/include/c++/11/filesystem:
+
 /usr/include/boost/config/detail/select_platform_config.hpp:
 
 /usr/include/boost/predef/compiler/tendra.h:
-
-/usr/include/boost/mpl/aux_/reverse_fold_impl.hpp:
-
-/usr/include/boost/mpl/erase_fwd.hpp:
-
-/usr/include/c++/11/bits/stl_uninitialized.h:
-
-/usr/include/boost/fusion/view/transform_view/detail/next_impl.hpp:
-
-/usr/include/boost/detail/basic_pointerbuf.hpp:
 
 /usr/include/boost/mpl/aux_/common_name_wknd.hpp:
 
@@ -3522,35 +3512,23 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
-/usr/include/boost/numeric/conversion/udt_builtin_mixture_enum.hpp:
+/usr/include/boost/mpl/list/list10.hpp:
 
-/usr/include/boost/optional/optional_fwd.hpp:
-
-/usr/include/boost/predef/compiler/sunpro.h:
-
-/usr/include/boost/random/chi_squared_distribution.hpp:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
-
-/usr/include/CGAL/Kernel/interface_macros.h:
+/usr/include/boost/move/detail/meta_utils_core.hpp:
 
 /usr/include/CGAL/Intersections_3/internal/Bbox_3_Ray_3_do_intersect.h:
-
-/usr/include/boost/predef/architecture/sys370.h:
-
-/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/main.cpp:
 
 /usr/include/boost/predef/detail/_exception.h:
 
 /usr/include/boost/math/special_functions/powm1.hpp:
 
+/usr/include/c++/11/string_view:
+
+/usr/include/c++/11/clocale:
+
 /usr/include/c++/11/istream:
 
 /usr/include/CGAL/predicates/kernel_ftC3.h:
-
-/usr/include/boost/variant/detail/visitation_impl.hpp:
-
-/usr/include/boost/predef/detail/test.h:
 
 /usr/include/boost/preprocessor/punctuation/comma_if.hpp:
 
@@ -3559,6 +3537,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/multiprecision/traits/is_backend.hpp:
 
 /usr/include/c++/11/bits/codecvt.h:
+
+/usr/include/boost/predef/detail/test.h:
 
 /usr/include/boost/preprocessor/variadic/elem.hpp:
 
@@ -3576,13 +3556,15 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/c++/11/bits/streambuf_iterator.h:
 
-/usr/include/CGAL/Intersections_3/Sphere_3_Sphere_3.h:
-
 /usr/include/boost/mpl/O1_size.hpp:
 
 /usr/include/c++/11/bits/streambuf.tcc:
 
 /usr/include/c++/11/bits/locale_facets.h:
+
+/usr/include/c++/11/bits/basic_ios.h:
+
+/usr/include/boost/type_traits/has_pre_decrement.hpp:
 
 /usr/include/c++/11/fenv.h:
 
@@ -3595,6 +3577,14 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Cartesian/Segment_2.h:
 
 /usr/include/c++/11/stdexcept:
+
+/usr/include/CGAL/linear_least_squares_fitting_spheres_3.h:
+
+/usr/include/CGAL/Intersections_3/Point_3_Ray_3.h:
+
+/usr/include/boost/type_index/stl_type_index.hpp:
+
+/usr/include/boost/variant/static_visitor.hpp:
 
 /usr/include/boost/mpl/limits/list.hpp:
 
@@ -3622,10 +3612,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
-/usr/include/CGAL/Distance_2/Point_2_Point_2.h:
-
-/usr/include/boost/predef/os/hpux.h:
-
 /usr/include/boost/mpl/aux_/preprocessed/gcc/bind.hpp:
 
 /usr/include/boost/predef/library/c/cloudabi.h:
@@ -3639,12 +3625,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Intersections_3/internal/Ray_3_Segment_3_intersection.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/include/boost/preprocessor/array/size.hpp:
-
-/usr/include/CGAL/Circle_2.h:
-
-/usr/include/CGAL/Distance_2/Segment_2_Segment_2.h:
 
 /usr/include/boost/utility/base_from_member.hpp:
 
@@ -3664,11 +3644,33 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/config/detail/select_stdlib_config.hpp:
 
+/usr/include/boost/mpl/protect.hpp:
+
+/usr/include/c++/11/chrono:
+
+/usr/include/boost/math/policies/policy.hpp:
+
+/usr/include/CGAL/assertions_impl.h:
+
+/usr/include/boost/math/tools/atomic.hpp:
+
 /usr/include/c++/11/bits/stl_heap.h:
+
+/usr/include/c++/11/bits/fs_path.h:
+
+/usr/include/CGAL/Cartesian/Vector_3.h:
 
 /usr/include/boost/predef/platform/mingw64.h:
 
 /usr/include/boost/type_traits/has_logical_not.hpp:
+
+/usr/include/boost/mpl/aux_/config/msvc_typename.hpp:
+
+/usr/include/c++/11/bits/shared_ptr.h:
+
+/usr/include/boost/mpl/aux_/msvc_eti_base.hpp:
+
+/usr/include/CGAL/Direction_2.h:
 
 /usr/include/time.h:
 
@@ -3684,12 +3686,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/multiprecision/detail/big_lanczos.hpp:
 
-/usr/include/boost/mpl/aux_/find_if_pred.hpp:
-
-/usr/include/c++/11/bits/stl_construct.h:
-
-/usr/include/c++/11/bits/erase_if.h:
-
 /usr/include/CGAL/long_double.h:
 
 /usr/include/boost/fusion/algorithm/transformation/insert_range.hpp:
@@ -3697,6 +3693,14 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/c++/11/bits/locale_classes.tcc:
 
 /usr/include/c++/11/ext/aligned_buffer.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/include/boost/mpl/aux_/find_if_pred.hpp:
+
+/usr/include/c++/11/bits/stl_construct.h:
+
+/usr/include/c++/11/bits/erase_if.h:
 
 /usr/include/boost/lexical_cast/detail/lcast_char_constants.hpp:
 
@@ -3723,14 +3727,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/integer/integer_mask.hpp:
 
 /usr/include/c++/11/bits/functional_hash.h:
-
-/usr/include/endian.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
-
-/usr/include/boost/mpl/minus.hpp:
-
-/usr/include/boost/mpl/aux_/preprocessed/gcc/iter_fold_impl.hpp:
 
 /usr/include/c++/11/bits/cpp_type_traits.h:
 
@@ -3759,6 +3755,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Kernel/solve.h:
 
 /usr/include/CGAL/version.h:
+
+/usr/include/c++/11/bits/fs_dir.h:
 
 /usr/include/boost/predef/architecture.h:
 
@@ -3802,8 +3800,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/predef/hardware/simd.h:
 
-/usr/include/boost/fusion/iterator/next.hpp:
-
 /usr/include/CGAL/number_type_config.h:
 
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
@@ -3812,23 +3808,9 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Intersections_3/internal/Segment_3_Tetrahedron_3_intersection.h:
 
-/usr/include/boost/range/detail/implementation_help.hpp:
+/usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
 
-/usr/include/boost/mpl/aux_/lambda_spec.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
-
-/usr/include/boost/multiprecision/detail/functions/trig.hpp:
-
-/usr/include/CGAL/Intersections_3/Segment_3_Sphere_3.h:
-
-/usr/include/boost/preprocessor/detail/auto_rec.hpp:
-
-/usr/include/boost/type_traits/is_complete.hpp:
-
-/usr/include/boost/math/policies/error_handling.hpp:
-
-/usr/include/CGAL/Intersections_3/internal/Point_3_Tetrahedron_3_do_intersect.h:
+/usr/include/boost/predef/architecture/x86/64.h:
 
 /usr/include/boost/mpl/apply.hpp:
 
@@ -3840,23 +3822,7 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/smart_ptr/detail/local_sp_deleter.hpp:
 
-/usr/include/boost/predef/library/std/msl.h:
-
-/usr/include/boost/mpl/aux_/inserter_algorithm.hpp:
-
-/usr/include/boost/utility/addressof.hpp:
-
-/usr/include/CGAL/kernel_assertions.h:
-
-/usr/include/boost/preprocessor/repetition/enum.hpp:
-
-/usr/include/CGAL/exceptions.h:
-
-/usr/include/boost/type_traits/is_copy_assignable.hpp:
-
 /usr/include/boost/version.hpp:
-
-/usr/include/boost/predef/architecture/x86/32.h:
 
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 
@@ -3864,7 +3830,15 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
+/usr/include/CGAL/Distance_2/Ray_2_Line_2.h:
+
+/usr/include/boost/iterator/reverse_iterator.hpp:
+
 /usr/include/c++/11/bits/nested_exception.h:
+
+/usr/include/CGAL/export/helpers.h:
+
+/usr/include/c++/11/limits:
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
@@ -3884,13 +3858,13 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/mpl/vector/aux_/clear.hpp:
 
-/usr/include/c++/11/bits/stl_multiset.h:
-
-/usr/include/boost/fusion/adapted/mpl.hpp:
-
 /usr/include/boost/fusion/view/transform_view/detail/value_of_impl.hpp:
 
 /usr/include/boost/range/detail/misc_concept.hpp:
+
+/usr/include/CGAL/linear_least_squares_fitting_triangles_3.h:
+
+/usr/include/stdc-predef.h:
 
 /usr/include/boost/fusion/sequence/intrinsic/empty.hpp:
 
@@ -3909,6 +3883,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
 /usr/include/CGAL/Intersections_3/internal/Bbox_3_Triangle_3_do_intersect.h:
+
+/usr/include/c++/11/bits/unique_ptr.h:
 
 /usr/include/CGAL/Intersections_3/internal/Ray_3_Segment_3_do_intersect.h:
 
@@ -3958,16 +3934,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/config.hpp:
 
-/usr/include/boost/mpl/protect.hpp:
-
-/usr/include/c++/11/chrono:
-
-/usr/include/boost/math/policies/policy.hpp:
-
-/usr/include/CGAL/assertions_impl.h:
-
-/usr/include/boost/math/tools/atomic.hpp:
-
 /usr/include/boost/math/special_functions/atanh.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
@@ -4012,15 +3978,21 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Intersections_3/Iso_cuboid_3_Iso_cuboid_3.h:
 
+/usr/include/CGAL/Intersections_3/Bbox_3_Bbox_3.h:
+
+/usr/include/errno.h:
+
 /usr/include/CGAL/Distance_3/Plane_3_Plane_3.h:
 
 /usr/include/boost/fusion/container/map/map_fwd.hpp:
 
-/usr/include/boost/predef/version_number.h:
-
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/CGAL/Distance_2/Segment_2_Ray_2.h:
+
+/usr/include/boost/predef/language.h:
+
+/usr/include/boost/multiprecision/cpp_int/comparison.hpp:
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
@@ -4030,11 +4002,7 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/c++/11/type_traits:
 
-/usr/include/boost/predef/architecture/ppc.h:
-
-/usr/include/boost/predef/compiler/greenhills.h:
-
-/usr/include/boost/predef/compiler/palm.h:
+/usr/include/boost/predef/architecture/x86/32.h:
 
 /usr/include/c++/11/version:
 
@@ -4044,31 +4012,41 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/multiprecision/cpp_int/limits.hpp:
 
-/usr/include/string.h:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
 /usr/include/boost/predef/os/qnxnto.h:
 
 /usr/include/boost/type_traits/has_virtual_destructor.hpp:
+
+/usr/include/boost/random/discard_block.hpp:
+
+/usr/include/CGAL/Intersections_3/internal/Tetrahedron_3_Unbounded_3_do_intersect.h:
+
+/usr/include/boost/fusion/mpl/back.hpp:
+
+/usr/include/c++/11/ctime:
+
+/usr/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Triangle_3_intersection.h:
+
+/usr/include/c++/11/variant:
+
+/usr/include/boost/mpl/back.hpp:
+
+/usr/include/boost/random/lognormal_distribution.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/string.h:
+
+/usr/include/boost/mpl/push_front_fwd.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+
+/usr/include/boost/predef/language/stdcpp.h:
 
 /usr/include/CGAL/centroid.h:
 
 /usr/include/c++/11/ext/concurrence.h:
 
 /usr/include/boost/predef/os/bsd/free.h:
-
-/usr/include/boost/mpl/aux_/msvc_eti_base.hpp:
-
-/usr/include/boost/mpl/aux_/config/msvc_typename.hpp:
-
-/usr/include/c++/11/bits/shared_ptr.h:
-
-/usr/include/CGAL/Direction_2.h:
-
-/usr/include/boost/iterator/reverse_iterator.hpp:
-
-/usr/include/CGAL/Distance_2/Ray_2_Line_2.h:
 
 /usr/include/c++/11/debug/debug.h:
 
@@ -4086,19 +4064,25 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Constrained_triangulation_face_base_2.h:
 
-/usr/include/CGAL/Sqrt_extension/Algebraic_structure_traits.h:
-
-/usr/include/CGAL/spatial_sort.h:
-
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/c++/11/bits/postypes.h:
 
-/usr/include/CGAL/auto_link/CGAL.h:
-
-/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
-
 /usr/include/boost/mpl/O1_size_fwd.hpp:
+
+/usr/include/c++/11/bits/invoke.h:
+
+/usr/include/boost/predef/architecture/z.h:
+
+/usr/include/c++/11/bits/basic_ios.tcc:
+
+/usr/include/boost/preprocessor/facilities/empty.hpp:
+
+/usr/include/CGAL/Cartesian/ft_constructions_3.h:
+
+/usr/include/CGAL/Intersections_3/internal/Plane_3_Point_3_do_intersect.h:
+
+/usr/include/boost/fusion/support/void.hpp:
 
 /usr/include/boost/mpl/aux_/config/nttp.hpp:
 
@@ -4125,6 +4109,14 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/type_traits/has_negate.hpp:
 
 /usr/include/boost/preprocessor/tuple/detail/is_single_return.hpp:
+
+/usr/include/c++/11/tuple:
+
+/usr/include/boost/mpl/max.hpp:
+
+/usr/include/c++/11/atomic:
+
+/usr/include/boost/predef/compiler/clang.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
@@ -4154,25 +4146,11 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
-/usr/include/boost/type_traits/add_rvalue_reference.hpp:
-
-/usr/include/boost/type_traits/is_destructible.hpp:
-
-/usr/include/boost/type_traits/add_cv.hpp:
-
 /usr/include/c++/11/new:
 
 /usr/include/boost/mpl/aux_/has_type.hpp:
 
 /usr/include/boost/mpl/aux_/template_arity_fwd.hpp:
-
-/usr/include/boost/predef/architecture/ia64.h:
-
-/usr/include/CGAL/gmp.h:
-
-/usr/include/c++/11/bits/predefined_ops.h:
-
-/usr/include/boost/mpl/aux_/back_impl.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
@@ -4181,14 +4159,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
-
-/usr/include/boost/math/special_functions/asinh.hpp:
-
-/usr/include/boost/preprocessor/control/if.hpp:
-
-/usr/include/CGAL/Distance_2/Ray_2_Triangle_2.h:
-
-/usr/include/boost/predef/library/c/zos.h:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
@@ -4201,6 +4171,20 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/c++/11/cctype:
 
 /usr/include/boost/optional/bad_optional_access.hpp:
+
+/usr/include/boost/mpl/list/aux_/push_back.hpp:
+
+/usr/include/CGAL/functional.h:
+
+/usr/include/boost/preprocessor/seq/enum.hpp:
+
+/usr/include/CGAL/aff_transformation_tags_impl.h:
+
+/usr/include/boost/fusion/support/sequence_base.hpp:
+
+/usr/include/boost/predef/architecture/m68k.h:
+
+/usr/include/CGAL/basic_classes.h:
 
 /usr/include/boost/config/detail/suffix.hpp:
 
@@ -4228,6 +4212,14 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/preprocessor/slot/detail/def.hpp:
 
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
+
+/usr/include/boost/range/detail/implementation_help.hpp:
+
+/usr/include/boost/mpl/aux_/lambda_spec.hpp:
+
+/usr/include/boost/multiprecision/detail/functions/trig.hpp:
+
 /usr/include/boost/predef/os/unix.h:
 
 /usr/include/boost/type_traits/is_volatile.hpp:
@@ -4248,13 +4240,17 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/mpl/vector/aux_/size.hpp:
 
+/usr/include/boost/mpl/list/aux_/preprocessed/plain/list10.hpp:
+
+/usr/include/boost/move/adl_move_swap.hpp:
+
 /usr/include/boost/utility/binary.hpp:
 
 /usr/include/boost/preprocessor/repetition/enum_trailing_params.hpp:
 
-/usr/include/c++/11/sstream:
-
 /usr/include/boost/preprocessor/list/fold_right.hpp:
+
+/usr/include/c++/11/sstream:
 
 /usr/include/CGAL/Distance_3/Point_3_Weighted_point_3.h:
 
@@ -4291,6 +4287,32 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/c++/11/ext/new_allocator.h:
 
 /usr/include/boost/fusion/adapted/mpl/detail/category_of_impl.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+
+/usr/include/CGAL/Homogeneous/distance_predicatesH2.h:
+
+/usr/include/c++/11/bits/basic_string.h:
+
+/usr/include/CGAL/Cartesian_converter_fwd.h:
+
+/usr/include/boost/mpl/aux_/config/intel.hpp:
+
+/usr/include/boost/predef/architecture/x86.h:
+
+/usr/include/boost/predef/make.h:
+
+/usr/include/boost/numeric/conversion/udt_builtin_mixture_enum.hpp:
+
+/usr/include/boost/optional/optional_fwd.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/CGAL/Kernel/interface_macros.h:
+
+/usr/include/boost/predef/compiler/sunpro.h:
+
+/usr/include/boost/random/chi_squared_distribution.hpp:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
@@ -4348,11 +4370,123 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/c++/11/fstream:
 
-/usr/include/x86_64-linux-gnu/sys/types.h:
+/usr/include/boost/preprocessor/array/size.hpp:
 
-/usr/include/boost/predef/architecture/z.h:
+/usr/include/CGAL/Distance_2/Segment_2_Segment_2.h:
 
-/usr/include/c++/11/bits/invoke.h:
+/usr/include/CGAL/Circle_2.h:
+
+/usr/include/CGAL/Intersections_3/Line_3_Sphere_3.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+
+/usr/include/CGAL/auto_link/CGAL.h:
+
+/usr/include/boost/predef.h:
+
+/usr/include/boost/mpl/list/aux_/tag.hpp:
+
+/usr/include/boost/predef/architecture/ptx.h:
+
+/usr/include/boost/type_traits/has_dereference.hpp:
+
+/usr/include/boost/range/functions.hpp:
+
+/usr/include/CGAL/Filtered_kernel/internal/Static_filters/Static_filters.h:
+
+/usr/include/boost/predef/architecture/mips.h:
+
+/usr/include/CGAL/Algebraic_structure_traits.h:
+
+/usr/include/boost/predef/version_number.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+
+/usr/include/boost/fusion/adapted/mpl.hpp:
+
+/usr/include/c++/11/bits/stl_multiset.h:
+
+/usr/include/boost/predef/os/hpux.h:
+
+/usr/include/CGAL/Distance_2/Point_2_Point_2.h:
+
+/usr/include/boost/mpl/long_fwd.hpp:
+
+/usr/include/boost/preprocessor/logical/and.hpp:
+
+/usr/include/boost/predef/library/c/zos.h:
+
+/usr/include/boost/math/special_functions/asinh.hpp:
+
+/usr/include/boost/preprocessor/control/if.hpp:
+
+/usr/include/CGAL/Distance_2/Ray_2_Triangle_2.h:
+
+/usr/include/boost/predef/library/std/msl.h:
+
+/usr/include/boost/mpl/aux_/inserter_algorithm.hpp:
+
+/usr/include/boost/utility/addressof.hpp:
+
+/usr/include/CGAL/kernel_assertions.h:
+
+/usr/include/boost/preprocessor/repetition/enum.hpp:
+
+/usr/include/c++/11/bits/fs_fwd.h:
+
+/usr/include/CGAL/Intersections_3/Iso_cuboid_3_Point_3.h:
+
+/usr/include/CGAL/exceptions.h:
+
+/usr/include/boost/type_traits/is_copy_assignable.hpp:
+
+/usr/include/boost/mpl/aux_/reverse_fold_impl.hpp:
+
+/usr/include/boost/mpl/erase_fwd.hpp:
+
+/usr/include/c++/11/bits/stl_uninitialized.h:
+
+/usr/include/boost/fusion/view/transform_view/detail/next_impl.hpp:
+
+/usr/include/boost/type_traits/is_complete.hpp:
+
+/usr/include/boost/math/policies/error_handling.hpp:
+
+/usr/include/CGAL/Intersections_3/internal/Point_3_Tetrahedron_3_do_intersect.h:
+
+/usr/include/CGAL/Intersections_3/Segment_3_Sphere_3.h:
+
+/usr/include/boost/preprocessor/detail/auto_rec.hpp:
+
+/usr/include/boost/fusion/iterator/next.hpp:
+
+/usr/include/c++/11/bits/predefined_ops.h:
+
+/usr/include/boost/mpl/aux_/back_impl.hpp:
+
+/usr/include/boost/predef/architecture/ia64.h:
+
+/usr/include/CGAL/gmp.h:
+
+/usr/include/boost/predef/architecture/parisc.h:
+
+/usr/include/boost/predef/architecture/ppc.h:
+
+/usr/include/boost/predef/compiler/greenhills.h:
+
+/usr/include/boost/predef/compiler/palm.h:
+
+/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/main.cpp:
+
+/usr/include/boost/predef/architecture/sys370.h:
+
+/usr/include/CGAL/Sqrt_extension/Algebraic_structure_traits.h:
+
+/usr/include/CGAL/spatial_sort.h:
+
+/usr/include/boost/type_traits/type_identity.hpp:
 
 /usr/include/boost/predef/compiler.h:
 
@@ -4370,14 +4504,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Intersections_3/Iso_cuboid_3_Segment_3.h:
 
-/usr/include/boost/mpl/max.hpp:
-
-/usr/include/c++/11/atomic:
-
-/usr/include/boost/predef/compiler/clang.h:
-
-/usr/include/c++/11/tuple:
-
 /usr/include/boost/predef/compiler/compaq.h:
 
 /usr/include/boost/preprocessor/tuple/eat.hpp:
@@ -4391,6 +4517,14 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/mpl/iter_fold.hpp:
 
 /usr/include/boost/predef/compiler/digitalmars.h:
+
+/usr/include/boost/concept/detail/has_constraints.hpp:
+
+/usr/include/CGAL/boost/iterator/counting_iterator.hpp:
+
+/usr/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Segment_3_do_intersect.h:
+
+/usr/include/CGAL/Cartesian/Aff_transformation_rep_2.h:
 
 /usr/include/wchar.h:
 
@@ -4417,6 +4551,16 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Homogeneous/RayH3.h:
 
 /usr/include/boost/predef/compiler/microtec.h:
+
+/usr/include/c++/11/bits/uses_allocator.h:
+
+/usr/include/CGAL/Plane_3.h:
+
+/usr/include/boost/mpl/aux_/full_lambda.hpp:
+
+/usr/include/CGAL/Intersections_3/internal/Line_3_Sphere_3_do_intersect.h:
+
+/usr/include/boost/mpl/aux_/config/workaround.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
@@ -4460,11 +4604,19 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/Intersections_3/Line_3_Ray_3.h:
 
+/usr/include/c++/11/codecvt:
+
 /usr/include/boost/type_traits/add_reference.hpp:
 
 /usr/include/boost/type_traits/integral_constant.hpp:
 
 /usr/include/boost/predef/library/std/stdcpp3.h:
+
+/usr/include/c++/11/bits/locale_facets_nonio.tcc:
+
+/usr/include/assert.h:
+
+/usr/include/boost/predef/library/std/_prefix.h:
 
 /usr/include/boost/predef/library/std/dinkumware.h:
 
@@ -4495,6 +4647,12 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/range/distance.hpp:
 
 /usr/include/boost/predef/os/aix.h:
+
+/usr/include/boost/mpl/aux_/arg_typedef.hpp:
+
+/usr/include/CGAL/Intersections_3/Bbox_3_Plane_3.h:
+
+/usr/include/boost/predef/hardware/simd/x86_amd.h:
 
 /usr/include/CGAL/aff_transformation_tags.h:
 
@@ -4528,15 +4686,11 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/type_traits/has_greater.hpp:
 
-/usr/include/c++/11/bits/stl_relops.h:
-
 /usr/include/boost/predef/compiler/diab.h:
 
-/usr/include/CGAL/Intersections_3/Point_3_Ray_3.h:
+/usr/include/boost/type_traits/is_lvalue_reference.hpp:
 
-/usr/include/CGAL/linear_least_squares_fitting_spheres_3.h:
-
-/usr/include/CGAL/Kernel/global_functions_2.h:
+/usr/include/boost/predef/platform/windows_store.h:
 
 /usr/include/boost/mpl/sequence_tag.hpp:
 
@@ -4554,31 +4708,25 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/predef/platform/cloudabi.h:
 
-/usr/include/boost/predef/platform/windows_system.h:
-
-/usr/include/boost/preprocessor/seq/elem.hpp:
-
-/usr/include/boost/variant/detail/hash_variant.hpp:
-
-/usr/include/boost/mpl/aux_/arg_typedef.hpp:
-
-/usr/include/CGAL/Intersections_3/Bbox_3_Plane_3.h:
-
-/usr/include/boost/predef/hardware/simd/x86_amd.h:
-
 /usr/include/libintl.h:
 
 /usr/include/boost/predef/platform/ios.h:
-
-/usr/include/boost/predef/compiler/metrowerks.h:
 
 /usr/include/boost/concept/detail/general.hpp:
 
 /usr/include/CGAL/Simple_cartesian.h:
 
+/usr/include/boost/predef/compiler/metrowerks.h:
+
 /usr/include/boost/predef/hardware/simd/x86_amd/versions.h:
 
 /usr/include/CGAL/extended_euclidean_algorithm.h:
+
+/usr/include/c++/11/bits/refwrap.h:
+
+/usr/include/boost/variant/detail/initializer.hpp:
+
+/usr/include/c++/11/utility:
 
 /usr/include/boost/predef/hardware/simd/arm.h:
 
@@ -4644,32 +4792,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/c++/11/bits/std_function.h:
 
-/usr/include/boost/mpl/aux_/config/workaround.hpp:
-
-/usr/include/c++/11/bits/uses_allocator.h:
-
-/usr/include/CGAL/Plane_3.h:
-
-/usr/include/boost/mpl/aux_/full_lambda.hpp:
-
-/usr/include/CGAL/Intersections_3/internal/Line_3_Sphere_3_do_intersect.h:
-
-/usr/include/c++/11/bits/basic_ios.tcc:
-
-/usr/include/boost/preprocessor/facilities/empty.hpp:
-
-/usr/include/CGAL/Cartesian/ft_constructions_3.h:
-
-/usr/include/CGAL/Intersections_3/internal/Plane_3_Point_3_do_intersect.h:
-
-/usr/include/boost/fusion/support/void.hpp:
-
-/usr/include/boost/variant/detail/initializer.hpp:
-
-/usr/include/c++/11/utility:
-
-/usr/include/c++/11/bits/refwrap.h:
-
 /usr/include/c++/11/unordered_map:
 
 /usr/include/boost/smart_ptr/detail/shared_count.hpp:
@@ -4687,40 +4809,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/c++/11/bits/unordered_set.h:
 
 /usr/include/boost/type_traits/is_object.hpp:
-
-/usr/include/boost/mpl/multiplies.hpp:
-
-/usr/include/c++/11/ratio:
-
-/usr/include/boost/mpl/aux_/pop_back_impl.hpp:
-
-/usr/include/c++/11/bits/unique_ptr.h:
-
-/usr/include/errno.h:
-
-/usr/include/CGAL/Intersections_3/Bbox_3_Bbox_3.h:
-
-/usr/include/CGAL/export/helpers.h:
-
-/usr/include/c++/11/limits:
-
-/usr/include/boost/random/discard_block.hpp:
-
-/usr/include/CGAL/Intersections_3/internal/Tetrahedron_3_Unbounded_3_do_intersect.h:
-
-/usr/include/boost/fusion/mpl/back.hpp:
-
-/usr/include/c++/11/ctime:
-
-/usr/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Triangle_3_intersection.h:
-
-/usr/include/c++/11/variant:
-
-/usr/include/boost/mpl/back.hpp:
-
-/usr/include/c++/11/bits/parse_numbers.h:
-
-/usr/include/boost/math/special_functions/hypot.hpp:
 
 /usr/include/c++/11/bits/atomic_base.h:
 
@@ -4758,13 +4846,15 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/type_traits/aligned_storage.hpp:
 
+/usr/include/CGAL/Cartesian/Point_3.h:
+
+/usr/include/c++/11/bits/shared_ptr_atomic.h:
+
 /usr/include/boost/container/detail/is_container.hpp:
 
 /usr/include/CGAL/Uncertain.h:
 
 /usr/include/boost/variant/detail/substitute_fwd.hpp:
-
-/usr/include/CGAL/Kernel_d/Matrix__.h:
 
 /usr/include/CGAL/Kernel/Same_uncertainty.h:
 
@@ -4785,36 +4875,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/MP_Float.h:
 
 /usr/include/boost/type_traits/has_bit_or_assign.hpp:
-
-/usr/include/c++/11/bits/locale_facets_nonio.h:
-
-/usr/include/boost/numeric/conversion/detail/conversion_traits.hpp:
-
-/usr/include/boost/type_traits/has_bit_and_assign.hpp:
-
-/usr/include/boost/fusion/view/transform_view/detail/value_at_impl.hpp:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
-
-/usr/include/boost/range/iterator.hpp:
-
-/usr/include/boost/mpl/assert.hpp:
-
-/usr/include/c++/11/bits/basic_ios.h:
-
-/usr/include/boost/type_traits/has_pre_decrement.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
-
-/usr/include/CGAL/Homogeneous/distance_predicatesH2.h:
-
-/usr/include/assert.h:
-
-/usr/include/boost/predef/library/std/_prefix.h:
-
-/usr/include/c++/11/bits/locale_facets_nonio.tcc:
-
-/usr/include/c++/11/bits/quoted_string.h:
 
 /usr/include/c++/11/map:
 
@@ -4942,10 +5002,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/mpl/aux_/config/dtp.hpp:
 
-/usr/include/boost/type_traits/is_function.hpp:
-
-/usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 
 /usr/include/boost/mpl/aux_/largest_int.hpp:
@@ -4961,24 +5017,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Intersections_2/internal/Triangle_2_Triangle_2_intersection_impl.h:
 
 /usr/include/boost/preprocessor/repeat.hpp:
-
-/usr/include/boost/preprocessor/array/data.hpp:
-
-/usr/include/boost/concept/detail/has_constraints.hpp:
-
-/usr/include/CGAL/boost/iterator/counting_iterator.hpp:
-
-/usr/include/CGAL/Cartesian/Aff_transformation_rep_2.h:
-
-/usr/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Segment_3_do_intersect.h:
-
-/usr/include/boost/fusion/adapted/mpl/mpl_iterator.hpp:
-
-/usr/include/boost/type_traits/remove_reference.hpp:
-
-/usr/include/boost/math/special_functions/gamma.hpp:
-
-/usr/include/boost/move/algo/detail/insertion_sort.hpp:
 
 /usr/include/boost/mpl/pop_back_fwd.hpp:
 
@@ -5052,17 +5090,17 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/type_traits/intrinsics.hpp:
 
-/usr/include/c++/11/tr1/bessel_function.tcc:
+/usr/include/boost/variant/detail/make_variant_list.hpp:
 
-/usr/include/boost/multiprecision/detail/atomic.hpp:
+/usr/include/boost/variant/detail/visitation_impl.hpp:
 
-/usr/include/boost/type_traits/declval.hpp:
+/usr/include/boost/preprocessor/seq/elem.hpp:
 
-/usr/include/boost/predef/platform/windows_store.h:
+/usr/include/boost/variant/detail/hash_variant.hpp:
 
-/usr/include/boost/type_traits/is_lvalue_reference.hpp:
+/usr/include/boost/mpl/vector/vector0.hpp:
 
-/usr/include/boost/type_traits/is_rvalue_reference.hpp:
+/usr/include/boost/variant/apply_visitor.hpp:
 
 /usr/include/boost/mpl/aux_/preprocessor/params.hpp:
 
@@ -5448,9 +5486,9 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/random/inversive_congruential.hpp:
 
-/usr/include/boost/math/special_functions/pow.hpp:
-
 /usr/include/c++/11/bits/vector.tcc:
+
+/usr/include/boost/math/special_functions/pow.hpp:
 
 /usr/include/boost/random/lagged_fibonacci.hpp:
 
@@ -5589,12 +5627,6 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/boost/fusion/adapted/mpl/detail/value_at_impl.hpp:
 
 /usr/include/CGAL/GMP/Gmpzf_type.h:
-
-/usr/include/c++/11/bits/shared_ptr_atomic.h:
-
-/usr/include/CGAL/Cartesian/Point_3.h:
-
-/usr/include/CGAL/Cartesian/Vector_3.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
 
@@ -5862,13 +5894,9 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/intersections.h:
 
-/usr/include/CGAL/linear_least_squares_fitting_segments_3.h:
-
 /usr/include/CGAL/Intersections_3/Bbox_3_Point_3.h:
 
 /usr/include/CGAL/Intersections_3/internal/Point_3_Tetrahedron_3_intersection.h:
-
-/usr/include/CGAL/Intersections_3/Iso_cuboid_3_Point_3.h:
 
 /usr/include/boost/predef/architecture/superh.h:
 
@@ -6270,6 +6298,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/type_traits/common_type.hpp:
 
+/usr/include/CGAL/Projection_traits_xy_3.h:
+
 /usr/include/boost/random/geometric_distribution.hpp:
 
 /usr/include/boost/multiprecision/detail/integer_ops.hpp:
@@ -6536,9 +6566,9 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/CGAL/license/Triangulation_2.h:
 
-/usr/include/boost/move/detail/meta_utils.hpp:
-
 /usr/include/boost/move/detail/config_begin.hpp:
+
+/usr/include/boost/move/detail/meta_utils.hpp:
 
 /usr/include/CGAL/triangulation_assertions.h:
 
@@ -6712,9 +6742,9 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/mpl/empty_base.hpp:
 
-/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_fwd.hpp:
-
 /usr/include/boost/lexical_cast/detail/inf_nan.hpp:
+
+/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_fwd.hpp:
 
 /usr/include/boost/fusion/sequence/intrinsic/detail/segmented_begin_impl.hpp:
 
@@ -7056,6 +7086,8 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 
 /usr/include/boost/intrusive/detail/minimal_less_equal_header.hpp:
 
+/usr/include/CGAL/Kernel_23/internal/Projection_traits_3.h:
+
 /usr/include/boost/preprocessor/config/config.hpp:
 
 /usr/include/CGAL/linear_least_squares_fitting_3.h:
@@ -7071,11 +7103,3 @@ CMakeFiles/hw01.dir/main.cpp.o: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo10
 /usr/include/CGAL/Linear_algebraCd.h:
 
 /usr/include/CGAL/Kernel_d/Vector__.h:
-
-/usr/include/CGAL/Subiterator.h:
-
-/usr/include/stdc-predef.h:
-
-/usr/include/CGAL/linear_least_squares_fitting_triangles_3.h:
-
-/usr/include/CGAL/linear_least_squares_fitting_tetrahedra_3.h:
