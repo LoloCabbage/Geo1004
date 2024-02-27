@@ -119,50 +119,72 @@ int main(int argc, const char * argv[]) {
 
 ////     Triangulate faces (to do)
     for (auto &face: faces) {
-        std::vector<Kernel::Point_3> projected_boundary;
+        std::vector<Kernel::Point_2> projected_2d_boundary;
+        CGAL::Vector_3<Kernel> normal = face.best_plane.orthogonal_vector(); // normal vector of the plane
+        CGAL::Vector_3<Kernel> u = face.best_plane.base1(); // base vector u
+        CGAL::Vector_3<Kernel> v = face.best_plane.base2(); // base vector v
+        auto first_vertex_id = face.boundary.front(); // first vertex id
+        Kernel::Point_3 first_vertex(vertices[first_vertex_id].x, vertices[first_vertex_id].y, vertices[first_vertex_id].z); // first vertex
+        Kernel::Point_3 first_projected_vertex = face.best_plane.projection(first_vertex); // first projected vertex
+        CGAL::Vector_3<Kernel> first_projected_vector(first_projected_vertex, CGAL::ORIGIN);// first projected vector
+        std::cout << "2D plane info: " << u << "," << v << "," << first_projected_vertex << std::endl;
         for (auto &vertex_id: face.boundary) {
+            // use the first vertex as the origin
             Kernel::Point_3 p(vertices[vertex_id].x, vertices[vertex_id].y, vertices[vertex_id].z);
-            // project the point to the plane
             Kernel::Point_3 projected_p = face.best_plane.projection(p);
-            // store the projected point to the vector
-            projected_boundary.push_back(projected_p);
-            // connect the points in the vector
-//            for (int i = 0; i < projected_boundary.size(); ++i) {
-//            }
+            CGAL::Vector_3<Kernel> projected_vector(projected_p, CGAL::ORIGIN);
+            CGAL::Vector_3<Kernel> difference_vector = projected_vector - first_projected_vector;
+            // project the 3D points to 2D
+            CGAL::Vector_2<Kernel> projected_2d_vector(difference_vector*u, difference_vector*v);
+            Kernel ::Point_2 projected_2d_point(projected_2d_vector.x(), projected_2d_vector.y());
+            std::cout << "Projected 2D point: " << projected_2d_point << std::endl;
+            projected_2d_boundary.push_back(projected_2d_point);
+        }
+        // constraint triangulation
+        for (int i = 0; i < projected_2d_boundary.size(); ++i) {
+            // insert constraint with consecutive vertices
+            face.triangulation.insert_constraint(projected_2d_boundary[i],
+                                                 projected_2d_boundary[(i+1)%projected_2d_boundary.size()]);
+        }
+            // check the validity of the triangulation
+        assert(face.triangulation.is_valid());
+            // triangulate the polygon
+        for (auto face_it = face.triangulation.finite_faces_begin();
+             face_it != face.triangulation.finite_faces_end(); ++face_it)// go through each face
+        {
+            if (face.triangulation.is_infinite(face_it)) // check if the face is infinite
+            {
+                face_it->info().interior = false; // Set the current face's interior flag
+            }
+            else
+            {
+                face_it->info().interior = true; // Set the current face's interior flag
+            }
 
         }
-    }
-////     Label triangulation (to do)
-    for (auto &face: faces) {
-        for (auto face_it = face.triangulation.finite_faces_begin(); face_it != face.triangulation.finite_faces_end(); ++face_it) {
-            if (face.triangulation.is_infinite(face_it)) {
-                face_it->info().interior = false;
-            }
-            else {
-                face_it->info().interior = true;
+        // output the vertex of triangles
+        for (auto face_it = face.triangulation.finite_faces_begin();
+             face_it != face.triangulation.finite_faces_end(); ++face_it) {
+            if (face_it->info().interior) {
+                std::cout << "Triangle: ";
+                for (int i = 0; i < 3; ++i) {
+                    auto vertex = face_it->vertex(i);
+                    std::cout << " " << vertex->point();
+                }
+                std::cout << std::endl;
             }
         }
     }
+
+////     Label triangulation (to do)
+
+
+
 ////     Export triangles (to do)
     std::ofstream output_stream;
     output_stream.open(output_file);
-    if (output_stream.is_open()) {
-        for (auto const &face: faces) {
-            for (auto face_it = face.triangulation.finite_faces_begin(); face_it != face.triangulation.finite_faces_end(); ++face_it) {
-                if (face_it->info().interior) {
-                    output_stream << "f";
-                    for (int i = 0; i < 3; ++i) {
-                        Kernel::Point_2 p = face.triangulation.point(face_it, i);
-                        output_stream << " " << p.x() << " " << p.y();
-                    }
-                    output_stream << std::endl;
-                }
-            }
-        }
+    // output all original vertices
+    for (auto const &vertex: vertices) {
+        output_stream << "v " << vertex.x << " " << vertex.y << " " << vertex.z << std::endl;
     }
-    else {
-        std::cerr << "Error: unable to open file :" << output_file << std::endl;
-        return 1;
-    }
-    return 0;
 }
