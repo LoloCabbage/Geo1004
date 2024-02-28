@@ -28,7 +28,7 @@ typedef CGAL::Triangulation_data_structure_2<VertexBase, FaceBaseWithInfo> Trian
 typedef CGAL::Constrained_Delaunay_triangulation_2<Kernel, TriangulationDataStructure, Tag> Triangulation;
 
 
-const std::string input_file = "/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/L_shape.obj"; // the faculty building
+const std::string input_file = "/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/faculty_origin.obj"; // the faculty building
 const std::string output_file = "/mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/faculty.obj";
 
 struct Vertex {
@@ -43,6 +43,7 @@ struct Vertex2D {
 
 struct triangle {
     int v1, v2, v3;
+    double center_x, center_y;
 };
 
 
@@ -154,11 +155,12 @@ int main(int argc, const char * argv[]) {
             projected_2d_boundary.push_back(projected_2d_point);
         }
         // constraint triangulation
+
         for (int i = 0; i < projected_2d_boundary.size(); ++i) {
             // insert constraint with consecutive vertices
             face.triangulation.insert_constraint(projected_2d_boundary[i].point,
                                                  projected_2d_boundary[(i+1)%projected_2d_boundary.size()].point);
-            std::cout << "Constraint: " << projected_2d_boundary[i].point << " " << projected_2d_boundary[(i+1)%projected_2d_boundary.size()].point << std::endl;
+            //std::cout << "Constraint: " << projected_2d_boundary[i].point << " " << projected_2d_boundary[(i+1)%projected_2d_boundary.size()].point << std::endl;
         }
 
             // check the validity of the triangulation
@@ -197,17 +199,42 @@ int main(int argc, const char * argv[]) {
                 t.v1 = array[0];
                 t.v2 = array[1];
                 t.v3 = array[2];
-                triangles.push_back(t);
+                //// calculate the center of the triangle
+
+                std::vector<Vertex2D> triangle_vertices;
+                for (auto const &vertex2d: projected_2d_boundary) {
+                    if (vertex2d.index == t.v1 || vertex2d.index == t.v2 || vertex2d.index == t.v3)
+                    {
+                        triangle_vertices.push_back(vertex2d);
+                    }
+                }
+                // calculate the center of the triangle
+                t.center_x = (triangle_vertices[0].point.x() + triangle_vertices[1].point.x() + triangle_vertices[2].point.x()) / 3;
+                t.center_y = (triangle_vertices[0].point.y() + triangle_vertices[1].point.y() + triangle_vertices[2].point.y()) / 3;
+                std::cout << "Triangle center: " << t.center_x<< "," << t.center_y << std::endl;
+
+                // judge if the center of triangle is in the interior of 2d_boundary
+                bool is_inside = false;
+                for (int i = 0, j = projected_2d_boundary.size() - 1; i < projected_2d_boundary.size(); j = i++)
+                {
+                    if (((projected_2d_boundary[i].point.y() > t.center_y) != (projected_2d_boundary[j].point.y() > t.center_y))
+                    && (t.center_x < (projected_2d_boundary[j].point.x() - projected_2d_boundary[i].point.x()) * (t.center_y - projected_2d_boundary[i].point.y())
+                        / (projected_2d_boundary[j].point.y() - projected_2d_boundary[i].point.y())
+                        + projected_2d_boundary[i].point.x()))
+                    {
+                        is_inside = !is_inside;
+                    }
+                }
+                if (is_inside) {
+                    triangles.push_back(t);
+                }
             }
         }
     }
-    // output all triangles
+//     print all triangles
     for (auto const &t: triangles) {
         std::cout << "f " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl;
     }
-
-////     Label triangulation (to do)
-
 
 
 ////     Export triangles (to do)
