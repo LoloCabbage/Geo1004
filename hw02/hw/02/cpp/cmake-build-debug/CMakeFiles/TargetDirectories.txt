@@ -1,0 +1,3 @@
+/mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw02/hw/02/cpp/cmake-build-debug/CMakeFiles/cjdemo.dir
+/mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw02/hw/02/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw02/hw/02/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
