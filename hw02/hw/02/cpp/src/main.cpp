@@ -41,7 +41,6 @@ int main(int argc, const char * argv[]) {
   std::cout << "Total RoofSurface: " << noroofsurfaces << std::endl;
 
   // list_all_vertices(j);
-
   // visit_roofsurfaces(j);
 
   generate_lod02(j);
@@ -65,14 +64,13 @@ int main(int argc, const char * argv[]) {
 //    }
 //  }
 
-  //-- write to disk the modified city model (out.city.json)
+  ////-- write to disk the modified city model (out.city.json)
   std::ofstream o("out.city.json");
   o << j.dump(2) << std::endl;
   o.close();
 
   return 0;
 }
-
 
 // Visit every 'RoofSurface' in the CityJSON model and output its geometry (the arrays of indices)
 // Useful to learn to visit the geometry boundaries and at the same time check their semantics.
@@ -93,7 +91,6 @@ void visit_roofsurfaces(json &j) {
   }
 }
 
-
 // Returns the number of 'RooSurface' in the CityJSON model
 int get_no_roof_surfaces(json &j) {
   int total = 0;
@@ -112,7 +109,6 @@ int get_no_roof_surfaces(json &j) {
   }
   return total;
 }
-
 
 // CityJSON files have their vertices compressed: https://www.cityjson.org/specs/1.1.1/#transform-object
 // this function visits all the surfaces and print the (x,y,z) coordinates of each vertex encountered
@@ -141,8 +137,8 @@ void list_all_vertices(json& j) {
 }
 
 
-// This method get the maximum height and the minimum height of the roof surfaces, and
-// use them to calculate the 70 percent roof height by: (max_rh - min_rh) * 0.7 + min_rh.
+////This method get the maximum height and the minimum height of the roof surfaces, and
+//// use them to calculate the 70 percent roof height by: (max_rh - min_rh) * 0.7 + min_rh.
 std::vector<double> roofheight_70p(const json& geometry, const json& j) {
   // initialize max roof height and min roof height.
   double max_roofheight = -INFINITY;
@@ -152,7 +148,7 @@ std::vector<double> roofheight_70p(const json& geometry, const json& j) {
   auto& vertices = j["vertices"];
   auto& transform = j["transform"];
 
-  if (geometry["type"] == "Solid") {
+  if (geometry["type"] == "Solid") {std::cout << "solid"<< std::endl;
     // start traverse every surface in the boundaries.
     for (int i = 0; i < geometry["boundaries"].size(); i++) {
       for (int j = 0; j < geometry["boundaries"][i].size(); j++) {
@@ -166,7 +162,7 @@ std::vector<double> roofheight_70p(const json& geometry, const json& j) {
             for (auto& index : rs_part) {
               int vertex_index = index.get<int>();
               auto& vertex = vertices[vertex_index];
-              int vertex_z = vertex[2].get<int>();
+              int vertex_z = vertex[2].get<int>(); // get the z value of the vertex.
               double z = (vertex_z * transform["scale"][2].get<double>()) + transform["translate"][2].get<double>();
               if (z > max_roofheight) { max_roofheight = z; }
               if (z < min_roofheight) { min_roofheight = z; }
@@ -177,7 +173,7 @@ std::vector<double> roofheight_70p(const json& geometry, const json& j) {
     }
   }
 
-  if (geometry["type"] == "MultiSurface") {
+  if (geometry["type"] == "MultiSurface") {std::cout << "multi"<< std::endl;
     for (int i = 0; i < geometry["boundaries"].size(); i++) {
       int sem_index = geometry["semantics"]["values"][i];
       if (geometry["semantics"]["surfaces"][sem_index]["type"] == "RoofSurface") {
@@ -198,11 +194,37 @@ std::vector<double> roofheight_70p(const json& geometry, const json& j) {
   }
 
 
-
   double roofheight_70p = (max_roofheight - min_roofheight) * 0.7 + min_roofheight;
   return {max_roofheight, min_roofheight, roofheight_70p};
 }
 
+////This method get the ground surfaces and their semantic index from the geometry.
+std::pair<nlohmann::json::array_t, nlohmann::json::array_t> getGroundSurfacesAndIndices(const json& geometry) {
+    auto ground_surface = json::array();
+    auto ground_surface_sem_index = json::array();
+
+    if (geometry["type"] == "Solid") {
+        for (int i = 0; i < geometry["boundaries"].size(); i++) {
+            for (int k = 0; k < geometry["boundaries"][i].size(); k++) {
+                int sem_index = geometry["semantics"]["values"][i][k];
+                if (geometry["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
+                    ground_surface.push_back(geometry["boundaries"][i][k]);
+                    ground_surface_sem_index.push_back(0); // Assuming '0' is a placeholder for actual index
+                }
+            }
+        }
+    } else if (geometry["type"] == "MultiSurface") {
+        for (int i = 0; i < geometry["boundaries"].size(); i++) {
+            int sem_index = geometry["semantics"]["values"][i];
+            if (geometry["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
+                ground_surface.push_back(geometry["boundaries"][i]);
+                ground_surface_sem_index.push_back(0); // Assuming '0' is a placeholder for actual index
+            }
+        }
+    }
+
+    return {ground_surface, ground_surface_sem_index};
+}
 
 void generate_lod02(json& j) {
   for (auto& co : j["CityObjects"].items()) {
@@ -221,8 +243,8 @@ void generate_lod02(json& j) {
 
     if (!co.value()["geometry"].empty()) {
       // initialize ground surface array and ground surface semantic index array.
-      auto ground_surface = json::array();
-      auto ground_surface_sem_index = json::array();
+//      auto ground_surface = json::array();
+//      auto ground_surface_sem_index = json::array();
 
       // get the first geometry which has the type "Solid" or "MultiSurface", use this to generate lod0.2.
       json first_geo;
@@ -242,26 +264,8 @@ void generate_lod02(json& j) {
       }
       std::cout << std::endl;
 
-      // get ground surfaces and their semantic index.
-      if (first_geo["type"] == "Solid") {
-        for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-          for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
-            int sem_index = first_geo["semantics"]["values"][i][k];
-            if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
-              ground_surface.push_back(first_geo["boundaries"][i][k]);
-              ground_surface_sem_index.push_back(0);
-            }
-          }
-        }
-      } else {
-          for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-            int sem_index = first_geo["semantics"]["values"][i];
-            if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
-              ground_surface.push_back(first_geo["boundaries"][i]);
-              ground_surface_sem_index.push_back(0);
-            }
-          }
-      }
+      auto ground_surface = getGroundSurfacesAndIndices(first_geo).first;
+      auto ground_surface_sem_index = getGroundSurfacesAndIndices(first_geo).second;
 
 
       // create new lod0.2 geometry
