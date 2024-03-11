@@ -267,7 +267,7 @@ void generate_lod12(json& j) {
             continue;
         }
 
-        //// get the groundsurface boundary/values of lod0.2
+        //// get the groundsurface boundary/values of lod0.2.
         auto ground_surface = json::array();
         auto ground_surface_sem_index = json::array();
         for (auto& g : co.value()["geometry"]) {
@@ -291,15 +291,15 @@ void generate_lod12(json& j) {
             auto roof_height = roofheight_70p(first_geo, j);
             double roof_70 = roof_height[2];
 
-        // create new lod1.2 geometry
-        json new_geometry = {{"lod", "1.2"}, {"type", "MultiSurface"}};
+        // create  lod1.2 roof geometry
+        json rf_geometry = {{"lod", "1.2"}, {"type", "MultiSurface"}};
         auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}, {{"type", "WallSurface"}}});
-        new_geometry["semantics"]["surfaces"] = sem_array;
-        new_geometry["semantics"]["values"] = ground_surface_sem_index;
-        new_geometry["boundaries"] = ground_surface;
+        rf_geometry["semantics"]["surfaces"] = sem_array;
+        rf_geometry["semantics"]["values"] = ground_surface_sem_index;
+        rf_geometry["boundaries"] = ground_surface;
 
         // use ground surface to generate the "roof surfaces" of lod1.2
-        for (auto& gs : new_geometry["boundaries"]) {
+        for (auto& gs : rf_geometry["boundaries"]) {
             auto new_gs = json::array();
             auto& vertices = j["vertices"];
             auto& transform = j["transform"];
@@ -318,11 +318,12 @@ void generate_lod12(json& j) {
                 new_gs.push_back(gs_lift);
             }
 
-            new_geometry["boundaries"].push_back(new_gs);
-            new_geometry["semantics"]["values"].push_back(1);
+            rf_geometry["boundaries"].push_back(new_gs);
+            rf_geometry["semantics"]["values"].push_back(1);
         }
 
-        co.value()["geometry"].push_back(new_geometry);
+
+        co.value()["geometry"].push_back(rf_geometry);
         }
     }
 }
