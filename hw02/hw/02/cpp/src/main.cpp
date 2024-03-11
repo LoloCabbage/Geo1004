@@ -28,7 +28,7 @@ void generate_lod12(json &j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/tudcampus.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -256,7 +256,7 @@ void generate_lod02(json& j) {
 
       //// create new lod0.2 geometry
       json new_geometry = {{"lod", "0.2"}, {"type", "MultiSurface"}};
-      auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}});
+      auto sem_array = json::array({{"type", "GroundSurface"}});
       new_geometry["semantics"]["surfaces"] = sem_array;
       new_geometry["semantics"]["values"] = ground_surface_sem_index;
       new_geometry["boundaries"] = ground_surface;
@@ -265,31 +265,100 @@ void generate_lod02(json& j) {
   }
 }
 
-void generate_lod12(json& j){
+void generate_lod12(json& j) {
     for (auto& co : j["CityObjects"].items()) {
-        // if an CityObject already has lod1.2, do nothing and skip.
+        // if an CityObject already has lod0.2, do nothing and skip.
         bool lod12_exist = false;
         for (auto& g : co.value()["geometry"]) {
-        if (g["lod"] == "1.2") {
-            lod12_exist = true;
-            break;
-        }
+            if (g["lod"] == "1.2") {
+                lod12_exist = true;
+                break;
+            }
         }
         if (lod12_exist) {
-        std::cout << "This CityObject already contains LoD1.2 geometry, skip." << std::endl;
-        continue;
+            std::cout << "This CityObject already contains LoD1.2 geometry, skip." << std::endl;
+            continue;
         }
 
         if (!co.value()["geometry"].empty()) {
-        // initialize ground surface array and ground surface semantic index array.
-        auto ground_surface = json::array();
-        auto ground_surface_sem_index = json::array();
+            // initialize ground surface array and ground surface semantic index array.
+            auto ground_surface = json::array();
+            auto ground_surface_sem_index = json::array();
 
-        //// get the first geometry which has the type "Solid" or "MultiSurface", use this to generate lod1.2.
-        json first_geo;
-        for (auto& g : co.value()["geometry"]) {
-            if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
-            first_geo = g;
-            break;
+            // get the first geometry which has the type "Solid" or "MultiSurface", use this to generate lod1.2.
+            json first_geo;
+            for (auto& g : co.value()["geometry"]) {
+                if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
+                    first_geo = g;
+                    break;
+                }
             }
+
+            // get the 70 percent roof height.
+            std::vector<double> roof_height_figures = roofheight_70p(first_geo, j);
+            double roof_height_70p = roof_height_figures[2];
+            std::cout << co.key() << " max_rh, min_rh, rh_70p: ";
+            for (double& figure: roof_height_figures) {
+                std::cout << figure << "; ";
+            }
+            std::cout << std::endl;
+
+            // get ground surfaces and their semantic index.
+            if (first_geo["type"] == "Solid") {
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
+                        int sem_index = first_geo["semantics"]["values"][i][k];
+                        if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
+                            ground_surface.push_back(first_geo["boundaries"][i][k]);
+                            ground_surface_sem_index.push_back(0);
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    int sem_index = first_geo["semantics"]["values"][i];
+                    if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
+                        ground_surface.push_back(first_geo["boundaries"][i]);
+                        ground_surface_sem_index.push_back(0);
+                    }
+                }
+            }
+
+
+            // create new lod1.2 geometry
+            json new_geometry = {{"lod", "1.2"}, {"type", "MultiSurface"}};
+            auto sem_array = json::array({{{"type", "GroundSurface"}},
+                                          {{"type", "RoofSurface"}}, {{"type", "WallSurface"}}});
+            new_geometry["semantics"]["surfaces"] = sem_array;
+            new_geometry["semantics"]["values"] = ground_surface_sem_index;
+            new_geometry["boundaries"] = ground_surface;
+
+            // use ground surface to generate the "roof surfaces" of lod1.2
+            for (auto& gs : new_geometry["boundaries"]) {
+                auto new_gs = json::array();
+                auto& vertices = j["vertices"];
+                auto& transform = j["transform"];
+
+                // use loop here to handle surface with interior boundaries.
+                for (auto& index_list : gs) {
+                    auto gs_lift = json::array();
+                    for (auto& index: index_list) {
+                        int vertex_index = index.get<int>();
+                        std::vector<int> vi = vertices[vertex_index];
+                        double z_lift = roof_height_70p;
+                        int z_int = std::round((z_lift - transform["translate"][2].get<double>()) /
+                                               transform["scale"][2].get<double>());
+                        vertices.push_back(json::array({vi[0], vi[1], z_int}));
+                        gs_lift.push_back(vertices.size() - 1);
+                    }
+                    new_gs.push_back(gs_lift);
+                }
+
+                new_geometry["boundaries"].push_back(new_gs);
+                new_geometry["semantics"]["values"].push_back(1);
+            }
+
+            co.value()["geometry"].push_back(new_geometry);
         }
+    }
+}
