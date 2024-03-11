@@ -22,9 +22,10 @@ using json = nlohmann::json;
 
 int   get_no_roof_surfaces(json &j);
 void  list_all_vertices(json& j);
-void  visit_roofsurfaces(json &j);
+bool wall_ground(json &j);
 void  generate_lod02(json &j);
 void generate_lod12(json &j);
+std::vector<std::vector<int>> get_ground_points (json& j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
@@ -42,7 +43,6 @@ int main(int argc, const char * argv[]) {
 
   // list_all_vertices(j);
 
-  // visit_roofsurfaces(j);
 
   generate_lod02(j);
   generate_lod12(j);
@@ -67,25 +67,60 @@ int main(int argc, const char * argv[]) {
 }
 
 
-// Visit every 'RoofSurface' in the CityJSON model and output its geometry (the arrays of indices)
-// Useful to learn to visit the geometry boundaries and at the same time check their semantics.
-void visit_roofsurfaces(json &j) {
-  for (auto& co : j["CityObjects"].items()) {
-    for (auto& g : co.value()["geometry"]) {
-      if (g["type"] == "Solid") {
-        for (int i = 0; i < g["boundaries"].size(); i++) {
-          for (int j = 0; j < g["boundaries"][i].size(); j++) {
-            int sem_index = g["semantics"]["values"][i][j];
-            if (g["semantics"]["surfaces"][sem_index]["type"].get<std::string>().compare("RoofSurface") == 0) {
-              std::cout << "RoofSurface: " << g["boundaries"][i][j] << std::endl;
+    // create a new array to store the ground points
+
+std::vector<std::vector<int>> get_ground_points (json& j) {
+    std::vector<std::vector<int>> ground_points;
+    for (auto& co: j["CityObjects"].items()) {
+        for (auto& g : co.value()["geometry"]) {
+            if (g["type"] == "Solid") {
+                for (int i = 0; i < g["boundaries"].size(); i++) {
+                    for (int j = 0; j < g["boundaries"][i].size(); j++) {
+                        int sem_index = g["semantics"]["values"][i][j];
+                        if (g["semantics"]["surfaces"][sem_index]["type"].get<std::string>().compare("GroundSurface") == 0) {
+                            for (auto& index : g["boundaries"][i][j]) {
+                                ground_points.push_back(index);
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
+    return ground_points;
 }
 
+bool wall_ground(json &j) {
+    auto ground_points = get_ground_points(j);
+    for (auto& co: j["CityObjects"].items()) {
+        for (auto& g : co.value()["geometry"]) {
+            if (g["type"] == "Solid") {
+                for (int i = 0; i < g["boundaries"].size(); i++) {
+                    for (int j = 0; j < g["boundaries"][i].size(); j++) {
+                        int sem_index = g["semantics"]["values"][i][j];
+                        // get all the wall surfaces that are on the footprint edge.
+                        if (g["semantics"]["surfaces"][sem_index]["type"].get<std::string>().compare("WallSurface") == 0
+                            && g["semantics"]["surfaces"][sem_index]["on_footprint_edge"].get<bool>()) {
+                            auto wall_bd = g["boundaries"][i][j];
+                            for (auto& wall_part : wall_bd) {
+                                for (auto& wall_point : wall_part) {
+                                    // if the wall point is on the ground surface, print it out.
+                                    for (auto& ground_point : ground_points) {
+                                        for (auto& gp : ground_point) {
+                                            if (wall_point.get<int>() == gp) {
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 // Returns the number of 'RooSurface' in the CityJSON model
 int get_no_roof_surfaces(json &j) {
@@ -280,11 +315,9 @@ void generate_lod12(json& j) {
         //// get the the 70 percent roof height of the CityObject.
         json first_geo;
         for (auto& geo : co.value()["geometry"]) {
-            if (geo["lod"] == "2.2") {
-                if (geo["type"] == "Solid" || geo["type"] == "MultiSurface") {
-                    first_geo = geo;
-                    break;
-                }
+            if (geo["type"] == "Solid") {
+                first_geo = geo;
+                break;
             }
         }
         if (!first_geo.is_null()) {
@@ -321,11 +354,15 @@ void generate_lod12(json& j) {
             rf_geometry["boundaries"].push_back(new_gs);
             rf_geometry["semantics"]["values"].push_back(1);
         }
-
+        co.value()["geometry"].push_back(rf_geometry);
 
         // create lod1.2 wall geometry
         json wall_geometry = {{"lod", "1.2"}, {"type", "Solid"}};
-        co.value()["geometry"].push_back(rf_geometry);
+        wall_geometry["semantics"]["surfaces"] = sem_array;
+        wall_geometry["boundaries"] = json::array();
+        wall_geometry["semantics"]["values"] = json::array();
+        //
+        co.value()["geometry"].push_back(wall_geometry);
         }
     }
 }
