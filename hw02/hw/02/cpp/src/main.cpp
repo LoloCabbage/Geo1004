@@ -292,7 +292,7 @@ void generate_lod12(json& j) {
             double roof_70 = roof_height[2];
 
         // create  lod1.2 roof geometry
-        json rf_geometry = {{"lod", "1.2"}, {"type", "MultiSurface"}};
+        json rf_geometry = {{"lod", "1.2"}, {"type", "Solid"}};
         auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}, {{"type", "WallSurface"}}});
         rf_geometry["semantics"]["surfaces"] = sem_array;
         rf_geometry["semantics"]["values"] = ground_surface_sem_index;
@@ -323,6 +323,8 @@ void generate_lod12(json& j) {
         }
 
 
+        // create lod1.2 wall geometry
+        json wall_geometry = {{"lod", "1.2"}, {"type", "Solid"}};
         co.value()["geometry"].push_back(rf_geometry);
         }
     }
