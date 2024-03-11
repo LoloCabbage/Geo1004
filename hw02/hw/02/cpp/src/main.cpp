@@ -266,7 +266,8 @@ void generate_lod12(json& j) {
             std::cout << "This CityObject already contains LoD1.2 geometry, skip." << std::endl;
             continue;
         }
-        //// get the groundsurface boundary of lod0.2
+
+        //// get the groundsurface boundary/values of lod0.2
         auto ground_surface = json::array();
         auto ground_surface_sem_index = json::array();
         for (auto& g : co.value()["geometry"]) {
@@ -275,6 +276,7 @@ void generate_lod12(json& j) {
                 ground_surface_sem_index = g["semantics"]["values"];
             }
         }
+
         //// get the the 70 percent roof height of the CityObject.
         json first_geo;
         for (auto& geo : co.value()["geometry"]) {
@@ -288,10 +290,39 @@ void generate_lod12(json& j) {
         if (!first_geo.is_null()) {
             auto roof_height = roofheight_70p(first_geo, j);
             double roof_70 = roof_height[2];
-            std::cout << co.key() << " max, min, 70%: "
-            << roof_height[0] << ", " << roof_height[1] << ", " << roof_70 << std::endl;
+
+        // create new lod1.2 geometry
+        json new_geometry = {{"lod", "1.2"}, {"type", "MultiSurface"}};
+        auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}, {{"type", "WallSurface"}}});
+        new_geometry["semantics"]["surfaces"] = sem_array;
+        new_geometry["semantics"]["values"] = ground_surface_sem_index;
+        new_geometry["boundaries"] = ground_surface;
+
+        // use ground surface to generate the "roof surfaces" of lod1.2
+        for (auto& gs : new_geometry["boundaries"]) {
+            auto new_gs = json::array();
+            auto& vertices = j["vertices"];
+            auto& transform = j["transform"];
+
+            // use loop here to handle surface with interior boundaries.
+            for (auto& index_list : gs) {
+                auto gs_lift = json::array();
+                for (auto& index: index_list) {
+                    int vertex_index = index.get<int>();
+                    std::vector<int> vi = vertices[vertex_index];
+                    double z_lift = roof_70;
+                    int z_int = std::round((z_lift - transform["translate"][2].get<double>()) / transform["scale"][2].get<double>());
+                    vertices.push_back(json::array({vi[0], vi[1], z_int}));
+                    gs_lift.push_back(vertices.size() - 1);
+                }
+                new_gs.push_back(gs_lift);
+            }
+
+            new_geometry["boundaries"].push_back(new_gs);
+            new_geometry["semantics"]["values"].push_back(1);
         }
 
-        //// wall surfaces and their semantic index.
+        co.value()["geometry"].push_back(new_geometry);
+        }
     }
 }
