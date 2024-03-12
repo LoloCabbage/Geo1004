@@ -22,7 +22,6 @@ using json = nlohmann::json;
 
 int   get_no_roof_surfaces(json &j);
 void  list_all_vertices(json& j);
-bool wall_ground(json &j);
 void  generate_lod02(json &j);
 void generate_lod12(json &j);
 std::vector<std::vector<int>> get_ground_points (json& j);
@@ -41,11 +40,9 @@ int main(int argc, const char * argv[]) {
   int noroofsurfaces = get_no_roof_surfaces(j);
   std::cout << "Total RoofSurface: " << noroofsurfaces << std::endl;
 
-  // list_all_vertices(j);
-
-
   generate_lod02(j);
   generate_lod12(j);
+
   //-- print out the number of Buildings in the file
   int nobuildings = 0;
   for (auto& co : j["CityObjects"]) {
@@ -75,10 +72,10 @@ std::vector<std::vector<int>> get_ground_points (json& j) {
         for (auto& g : co.value()["geometry"]) {
             if (g["type"] == "Solid") {
                 for (int i = 0; i < g["boundaries"].size(); i++) {
-                    for (int j = 0; j < g["boundaries"][i].size(); j++) {
-                        int sem_index = g["semantics"]["values"][i][j];
+                    for (int k = 0; k < g["boundaries"][i].size(); k++) {
+                        int sem_index = g["semantics"]["values"][i][k];
                         if (g["semantics"]["surfaces"][sem_index]["type"].get<std::string>().compare("GroundSurface") == 0) {
-                            for (auto& index : g["boundaries"][i][j]) {
+                            for (auto& index : g["boundaries"][i][k]) {
                                 ground_points.push_back(index);
                             }
                         }
@@ -87,39 +84,26 @@ std::vector<std::vector<int>> get_ground_points (json& j) {
             }
         }
     }
+    std::cout << "Ground points: " << ground_points.size() << std::endl;
     return ground_points;
 }
 
-bool wall_ground(json &j) {
-    auto ground_points = get_ground_points(j);
-    for (auto& co: j["CityObjects"].items()) {
-        for (auto& g : co.value()["geometry"]) {
-            if (g["type"] == "Solid") {
-                for (int i = 0; i < g["boundaries"].size(); i++) {
-                    for (int j = 0; j < g["boundaries"][i].size(); j++) {
-                        int sem_index = g["semantics"]["values"][i][j];
-                        // get all the wall surfaces that are on the footprint edge.
-                        if (g["semantics"]["surfaces"][sem_index]["type"].get<std::string>().compare("WallSurface") == 0
-                            && g["semantics"]["surfaces"][sem_index]["on_footprint_edge"].get<bool>()) {
-                            auto wall_bd = g["boundaries"][i][j];
-                            for (auto& wall_part : wall_bd) {
-                                for (auto& wall_point : wall_part) {
-                                    // if the wall point is on the ground surface, print it out.
-                                    for (auto& ground_point : ground_points) {
-                                        for (auto& gp : ground_point) {
-                                            if (wall_point.get<int>() == gp) {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+bool wall_ground(const json&gp,const json &wall_bd, json &j) {
+    for (auto& wall_part : wall_bd) {
+        for (auto& wall_point : wall_part) {
+            // if the wall point is on the ground surface, print it out.
+            for (auto& ground_point : gp) {
+                for (auto& point_set : ground_point) {
+                    std::vector<int> ground_vector = point_set.get<std::vector<int>>();
+                    int wall_index = wall_point.get<int>();
+                    if (std::find(ground_vector.begin(), ground_vector.end(), wall_index) != ground_vector.end()) {
+                        return true;
                     }
                 }
             }
         }
     }
+    return false;
 }
 
 // Returns the number of 'RooSurface' in the CityJSON model
@@ -288,10 +272,10 @@ std::vector<double> roofheight_70p(const json& geometry, const json& j) {
 }
 
 void generate_lod12(json& j) {
-    for (auto& co : j["CityObjects"].items()) {
+    for (auto &co: j["CityObjects"].items()) {
         //// if an CityObject already has lod0.2, do nothing and skip.
         bool lod12_exist = false;
-        for (auto& g : co.value()["geometry"]) {
+        for (auto &g: co.value()["geometry"]) {
             if (g["lod"] == "1.2") {
                 lod12_exist = true;
                 break;
@@ -302,10 +286,10 @@ void generate_lod12(json& j) {
             continue;
         }
 
-        //// get the groundsurface boundary/values of lod0.2.
+        //// get the groundsurface boundary/values/points of lod0.2.
         auto ground_surface = json::array();
         auto ground_surface_sem_index = json::array();
-        for (auto& g : co.value()["geometry"]) {
+        for (auto &g: co.value()["geometry"]) {
             if (g["lod"] == "0.2") {
                 ground_surface = g["boundaries"];
                 ground_surface_sem_index = g["semantics"]["values"];
@@ -314,7 +298,7 @@ void generate_lod12(json& j) {
 
         //// get the the 70 percent roof height of the CityObject.
         json first_geo;
-        for (auto& geo : co.value()["geometry"]) {
+        for (auto &geo: co.value()["geometry"]) {
             if (geo["type"] == "Solid") {
                 first_geo = geo;
                 break;
@@ -324,45 +308,66 @@ void generate_lod12(json& j) {
             auto roof_height = roofheight_70p(first_geo, j);
             double roof_70 = roof_height[2];
 
-        // create  lod1.2 roof geometry
-        json rf_geometry = {{"lod", "1.2"}, {"type", "Solid"}};
-        auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}, {{"type", "WallSurface"}}});
-        rf_geometry["semantics"]["surfaces"] = sem_array;
-        rf_geometry["semantics"]["values"] = ground_surface_sem_index;
-        rf_geometry["boundaries"] = ground_surface;
+            // create  lod1.2 roof geometry
+            json rf_geometry = {{"lod",  "1.2"},
+                                {"type", "Solid"}};
+            auto sem_array = json::array({{{"type", "GroundSurface"}},
+                                          {{"type", "RoofSurface"}},
+                                          {{"type", "WallSurface"}}});
+            rf_geometry["semantics"]["surfaces"] = sem_array;
+            rf_geometry["semantics"]["values"] = ground_surface_sem_index;
+            rf_geometry["boundaries"] = ground_surface;
 
-        // use ground surface to generate the "roof surfaces" of lod1.2
-        for (auto& gs : rf_geometry["boundaries"]) {
-            auto new_gs = json::array();
-            auto& vertices = j["vertices"];
-            auto& transform = j["transform"];
+            // use ground surface to generate the "roof surfaces" of lod1.2
+            for (auto &gs: rf_geometry["boundaries"]) {
+                auto new_gs = json::array();
+                auto &vertices = j["vertices"];
+                auto &transform = j["transform"];
 
-            // use loop here to handle surface with interior boundaries.
-            for (auto& index_list : gs) {
-                auto gs_lift = json::array();
-                for (auto& index: index_list) {
-                    int vertex_index = index.get<int>();
-                    std::vector<int> vi = vertices[vertex_index];
-                    double z_lift = roof_70;
-                    int z_int = std::round((z_lift - transform["translate"][2].get<double>()) / transform["scale"][2].get<double>());
-                    vertices.push_back(json::array({vi[0], vi[1], z_int}));
-                    gs_lift.push_back(vertices.size() - 1);
+                // use loop here to handle surface with interior boundaries.
+                for (auto &index_list: gs) {
+                    auto gs_lift = json::array();
+                    for (auto &index: index_list) {
+                        int vertex_index = index.get<int>();
+                        std::vector<int> vi = vertices[vertex_index];
+                        double z_lift = roof_70;
+                        int z_int = std::round((z_lift - transform["translate"][2].get<double>()) /
+                                               transform["scale"][2].get<double>());
+                        vertices.push_back(json::array({vi[0], vi[1], z_int}));
+                        gs_lift.push_back(vertices.size() - 1);
+                    }
+                    new_gs.push_back(gs_lift);
                 }
-                new_gs.push_back(gs_lift);
+
+                rf_geometry["boundaries"].push_back(new_gs);
+                rf_geometry["semantics"]["values"].push_back(1);
             }
+            co.value()["geometry"].push_back(rf_geometry);
 
-            rf_geometry["boundaries"].push_back(new_gs);
-            rf_geometry["semantics"]["values"].push_back(1);
-        }
-        co.value()["geometry"].push_back(rf_geometry);
+            // create lod1.2 wall geometry
+            json wall_geometry = {{"lod",  "1.2"},
+                                  {"type", "Solid"}};
+            wall_geometry["semantics"]["surfaces"] = sem_array;
+            wall_geometry["boundaries"] = json::array();
+            wall_geometry["semantics"]["values"] = json::array();
+            for (auto &g: co.value()["geometry"]) {
+                if (g["type"] == "Solid" && g["lod"] == "2.2") {
+                    for (int i = 0; i < g["boundaries"].size(); i++) {
+                        for (int k = 0; k < g["boundaries"][i].size(); k++) {// use k to avoid the conflict with other variables.!!!
+                            int sem_index = g["semantics"]["values"][i][k];
+                            if (g["semantics"]["surfaces"][sem_index]["type"] == "WallSurface"
+                                && g["semantics"]["surfaces"][sem_index]["on_footprint_edge"].get<bool>()) {
+                                auto wall_bd = g["boundaries"][i][k];
+                                if (wall_ground(ground_surface,wall_bd, j)) {
+                                    std::cout << "This wall" << wall_bd <<"is on the ground surface." << std::endl;
+                                }
+                            }
+                        }
+                    }
 
-        // create lod1.2 wall geometry
-        json wall_geometry = {{"lod", "1.2"}, {"type", "Solid"}};
-        wall_geometry["semantics"]["surfaces"] = sem_array;
-        wall_geometry["boundaries"] = json::array();
-        wall_geometry["semantics"]["values"] = json::array();
-        //
-        co.value()["geometry"].push_back(wall_geometry);
+                    co.value()["geometry"].push_back(wall_geometry);
+                }
+            }
         }
     }
 }
