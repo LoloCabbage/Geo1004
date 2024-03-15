@@ -15,11 +15,12 @@ typedef CGAL::Polygon_2<K> Polygon_2;
 using json = nlohmann::json;
 
 void  generate_lod02(json &j);
+void  generate_lod12(json &j);
 
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/tudcampus.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -27,7 +28,7 @@ int main(int argc, const char * argv[]) {
   input.close();
 
   generate_lod02(j);
-
+  generate_lod12(j);
   //-- write to disk the modified city model (out.city.json)
   std::ofstream o("out.city.json");
   o << j.dump(2) << std::endl;
@@ -37,67 +38,29 @@ int main(int argc, const char * argv[]) {
 }
 
 
-// This method get the maximum height and the minimum height of the roof surfaces, and
-// use them to calculate the 70 percent roof height by: (max_rh - min_rh) * 0.7 + min_rh.
-std::vector<double> roofheight_70p(const json& geometry, const json& j) {
-  // initialize max roof height and min roof height.
-  double max_roofheight = -INFINITY;
-  double min_roofheight = INFINITY;
-
-  // get vertices and transform from the json file.
-  auto& vertices = j["vertices"];
-  auto& transform = j["transform"];
-
-  if (geometry["type"] == "Solid") {
-    // start traverse every surface in the boundaries.
-    for (int i = 0; i < geometry["boundaries"].size(); i++) {
-      for (int j = 0; j < geometry["boundaries"][i].size(); j++) {
-
-        // get the minimum z value of all vertices from all roof surfaces.
-        int sem_index = geometry["semantics"]["values"][i][j];
-        if (geometry["semantics"]["surfaces"][sem_index]["type"] == "RoofSurface"){
-          auto& roofsurface = geometry["boundaries"][i][j];
-
-          for (auto& rs_part : roofsurface) {
-            for (auto& index : rs_part) {
-              int vertex_index = index.get<int>();
-              auto& vertex = vertices[vertex_index];
-              int vertex_z = vertex[2].get<int>();
-              double z = (vertex_z * transform["scale"][2].get<double>()) + transform["translate"][2].get<double>();
-              if (z > max_roofheight) { max_roofheight = z; }
-              if (z < min_roofheight) { min_roofheight = z; }
-            }
-          }
-        }
-      }
+//// remove the boundary vertices with 10% of the highest z value.
+int roof_point(std::vector<std::pair<double, int>> height_index){
+    std::sort(height_index.begin(), height_index.end(),
+              [](const std::pair<double, int>& a, const std::pair<double, int>& b) {
+                  return a.first > b.first; //
+              });
+    int remove_index = height_index.size() * 0.1; // remove 10% of the highest z value.
+    if (remove_index > 0) {
+        height_index.erase(height_index.begin(), height_index.begin() + remove_index);
     }
-  }
-
-  if (geometry["type"] == "MultiSurface") {
-    for (int i = 0; i < geometry["boundaries"].size(); i++) {
-      int sem_index = geometry["semantics"]["values"][i];
-      if (geometry["semantics"]["surfaces"][sem_index]["type"] == "RoofSurface") {
-        auto& roofsurface = geometry["boundaries"][i];
-
-        for (auto& rs_part : roofsurface) {
-          for (auto &index: rs_part) {
-            int vertex_index = index.get<int>();
-            auto &vertex = vertices[vertex_index];
-            int vertex_z = vertex[2].get<int>();
-            double z = (vertex_z * transform["scale"][2].get<double>()) + transform["translate"][2].get<double>();
-            if (z > max_roofheight) { max_roofheight = z; }
-            if (z < min_roofheight) { min_roofheight = z; }
-            }
+    //find the highest z value/index of the left vertices.
+    double max_z = -INFINITY;
+    int max_index = -1;
+    for (auto &hi: height_index) {
+        if (hi.first > max_z) {
+            max_z = hi.first;
+            max_index = hi.second;
+            return max_index;
         }
-      }
     }
-  }
-
-  double roofheight_70p = (max_roofheight - min_roofheight) * 0.7 + min_roofheight;
-  return {max_roofheight, min_roofheight, roofheight_70p};
 }
 
-
+//// generate LoD0.2 geometry
 void generate_lod02(json& j) {
   for (auto& co : j["CityObjects"].items()) {
     // if an CityObject already has lod0.2, do nothing and skip.
@@ -118,7 +81,8 @@ void generate_lod02(json& j) {
       auto ground_surface = json::array();
       auto ground_surface_sem_index = json::array();
 
-      // get the first geometry which has the type "Solid" or "MultiSurface", use this to generate lod0.2.
+      // get the first geometry which has the type "Solid" or "MultiSurface",
+      // use this to generate lod0.2.
       json first_geo;
       for (auto& g : co.value()["geometry"]) {
         if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
@@ -127,37 +91,8 @@ void generate_lod02(json& j) {
         }
       }
 
-      // get the 70 percent roof height.
-      std::vector<double> roof_height_figures = roofheight_70p(first_geo, j);
-      double roof_height_70p = roof_height_figures[2];
-//      std::cout << co.key() << " max_rh, min_rh, rh_70p: ";
-//      for (double& figure: roof_height_figures) {
-//          std::cout << figure << "; ";
-//      }
-//      std::cout << std::endl;
-
-      // get ground surfaces and their semantic index.
-//      if (first_geo["type"] == "Solid") {
-//        for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-//          for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
-//            int sem_index = first_geo["semantics"]["values"][i][k];
-//            if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
-//              ground_surface.push_back(first_geo["boundaries"][i][k]);
-//              ground_surface_sem_index.push_back(0);
-//            }
-//          }
-//        }
-//      } else {
-//          for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-//            int sem_index = first_geo["semantics"]["values"][i];
-//            if (first_geo["semantics"]["surfaces"][sem_index]["type"] == "GroundSurface") {
-//              ground_surface.push_back(first_geo["boundaries"][i]);
-//              ground_surface_sem_index.push_back(0);
-//            }
-//          }
-//      }
-
       // get ground surfaces using mean z-value, instead of referring to semantics.
+      // ground surface is identified by the lowest mean z-value and the largest area.
       int shell_index = -1;
       int ring_index = -1;
       double z_mean = INFINITY;
@@ -213,7 +148,7 @@ void generate_lod02(json& j) {
             }
             double surface_mean_z = surface_sum_z / surface_num_vi;
             double surface_2d_area = fabs(surface_2d.area());
-            if (surface_mean_z < z_mean && surface_2d_area > area) {
+            if (surface_mean_z <= z_mean && surface_2d_area >= area) {
               ring_index = i;
               z_mean = surface_mean_z;
               area = surface_2d_area;
@@ -229,32 +164,126 @@ void generate_lod02(json& j) {
       new_geometry["semantics"]["surfaces"] = sem_array;
       new_geometry["semantics"]["values"] = ground_surface_sem_index;
       new_geometry["boundaries"] = ground_surface;
-
-      // use ground surface to generate the "roof surfaces" of lod0.2
-//      for (auto& gs : new_geometry["boundaries"]) {
-//        auto new_gs = json::array();
-//        auto& vertices = j["vertices"];
-//        auto& transform = j["transform"];
-//
-//        // use loop here to handle surface with interior boundaries.
-//        for (auto& index_list : gs) {
-//          auto gs_lift = json::array();
-//          for (auto& index: index_list) {
-//            int vertex_index = index.get<int>();
-//            std::vector<int> vi = vertices[vertex_index];
-//            double z_lift = roof_height_70p;
-//            int z_int = std::round((z_lift - transform["translate"][2].get<double>()) / transform["scale"][2].get<double>());
-//            vertices.push_back(json::array({vi[0], vi[1], z_int}));
-//            gs_lift.push_back(vertices.size() - 1);
-//          }
-//          new_gs.push_back(gs_lift);
-//        }
-//
-//        new_geometry["boundaries"].push_back(new_gs);
-//        new_geometry["semantics"]["values"].push_back(1);
-//      }
-
       co.value()["geometry"].push_back(new_geometry);
     }
   }
+}
+
+void generate_lod12(json& j){
+    for (auto& co : j["CityObjects"].items()) {
+        // if an CityObject already has lod1.2, do nothing and skip.
+        bool lod12_exist = false;
+        for (auto &g: co.value()["geometry"]) {
+            if (g["lod"] == "1.2") {
+                lod12_exist = true;
+                break;
+            }
+        }
+        if (lod12_exist) {
+            std::cout << "This CityObject already contains LoD0.2 geometry, skip." << std::endl;
+            continue;
+        }
+        if (!co.value()["geometry"].empty()) {
+            auto surface = json::array();
+            auto surface_sem_index = json::array();
+            for (auto &g:co.value()["geometry"]) {
+                // get the ground surface from lod0.2 geometry.
+                if (g["lod"] == "0.2") {
+                    surface = g["boundaries"];
+                    surface_sem_index = g["semantics"]["values"];
+                    break;
+                }
+            }
+            json first_geo;
+            for (auto &g: co.value()["geometry"]) {
+                if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
+                    first_geo = g;
+                    break;
+                }
+            }
+            // record the height of the vertices and their index.
+            std::vector<std::pair<double, int>> height_index;
+            if (first_geo["type"] == "Solid"){
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
+                        // get the z value of the vertices and store them in the height vector.
+                        for (auto &vi_list: first_geo["boundaries"][i][k]) {
+                            for (auto &vi: vi_list) {
+                                int vertex_index = vi.get<int>();
+                                auto &vertex = j["vertices"][vertex_index];
+                                int vertex_z = vertex[2].get<int>();
+                                double z = (vertex_z * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                                height_index.push_back(std::make_pair(z, vertex_index));
+                            }
+                        }
+                    }
+                }
+            }
+            else if (first_geo["type"] == "MultiSurface") {
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    for (auto &vi_list: first_geo["boundaries"][i]) {
+                        for (auto &vi: vi_list) {
+                            int vertex_index = vi.get<int>();
+                            auto &vertex = j["vertices"][vertex_index];
+                            int vertex_z = vertex[2].get<int>();
+                            double z = (vertex_z * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                            height_index.push_back(std::make_pair(z, vertex_index));
+                        }
+                    }
+                }
+            }
+            int roof_index = roof_point(height_index);
+            // find the surface where the roof point is located.
+            if (first_geo["type"] == "Solid"){
+                std::vector<std::pair<int, int>> surface_index;
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
+                        for (auto &vi_list: first_geo["boundaries"][i][k]) {
+                            for (auto &vi: vi_list) {
+                                if (vi.get<int>() == roof_index) {
+                                    surface_index.emplace_back(i, k);
+                                }
+                            }
+                        }
+                    }
+                }
+                //// calculate the area of the surface where the roof point is located.
+                //// select the surface with the largest area as the main roof surface.
+                double max_area = -INFINITY;
+                int max_index = -1;
+                for (int i = 0; i < surface_index.size(); i++) {
+                    int shell_index = surface_index[i].first;
+                    int ring_index = surface_index[i].second;
+                    Polygon_2 surface_2d;
+                    for (auto &vi_list: first_geo["boundaries"][shell_index][ring_index]) {
+                        for (auto &vi: vi_list) {
+                            std::vector<int> v = j["vertices"][vi.get<int>()];
+                            double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
+                            double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
+                            surface_2d.push_back(K::Point_2(x, y));
+                        }
+                    }
+                    double area = fabs(surface_2d.area());
+                    if (area > max_area) {
+                        max_area = area;
+                        max_index = i;
+                    }
+                }
+                auto main_roof = first_geo["boundaries"][surface_index[max_index].first][surface_index[max_index].second];
+
+            }
+            else if (first_geo["type"] == "MultiSurface") {
+                std::vector<int> surface_index;
+                for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+                    for (auto &vi_list: first_geo["boundaries"][i]) {
+                        for (auto &vi: vi_list) {
+                            if (vi.get<int>() == roof_index) {
+                                surface_index.push_back(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
