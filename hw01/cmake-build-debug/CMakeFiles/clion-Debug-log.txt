@@ -1,4 +1,4 @@
-C:\WINDOWS\system32\wsl.exe --distribution Ubuntu-22.04 --exec /bin/bash -c "export CMAKE_COLOR_DIAGNOSTICS=ON && export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/cmake-build-debug && /usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01 -B /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/cmake-build-debug"
+C:\WINDOWS\system32\wsl.exe --distribution Ubuntu-22.04 --exec /bin/bash -c "export CMAKE_COLOR_DIAGNOSTICS=ON && export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd /mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw01/cmake-build-debug && /usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S /mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw01 -B /mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw01/cmake-build-debug"
 -- The C compiler identification is GNU 11.4.0
 -- The CXX compiler identification is GNU 11.4.0
 -- Detecting C compiler ABI info
@@ -46,6 +46,6 @@ Call Stack (most recent call first):
   CMakeLists.txt:9223372036854775807 (CGAL_run_at_the_end_of_configuration)
 
 
--- Configuring done (4.6s)
+-- Configuring done (2.8s)
 -- Generating done (0.1s)
--- Build files have been written to: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/Geo1004/hw01/cmake-build-debug
+-- Build files have been written to: /mnt/c/Users/Acer/Documents/GitHub/Geo1004/hw01/cmake-build-debug

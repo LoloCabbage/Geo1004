@@ -9,8 +9,12 @@
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2.h>
+#include <CGAL/Plane_3.h>
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polygon_2<K> Polygon_2;
+typedef K::Point_3 Point_3;
+typedef K::Vector_3 Vector_3;
+typedef K::Plane_3 Plane_3;
 
 using json = nlohmann::json;
 
@@ -40,7 +44,7 @@ int main(int argc, const char * argv[]) {
 
 //// remove the boundary vertices with 10% of the highest z value.
 //// find the highest z value/index of the left vertices as the roof point.
-int roof_point(std::vector<std::pair<double, int>> height_index,double rate = 0.1){
+std::pair<int, double> roof_point(std::vector<std::pair<double, int>> height_index,double rate = 0.1){
     std::sort(height_index.begin(), height_index.end(),
               [](const std::pair<double, int>& a, const std::pair<double, int>& b) {
                   return a.first > b.first; //
@@ -58,8 +62,8 @@ int roof_point(std::vector<std::pair<double, int>> height_index,double rate = 0.
             max_index = hi.second;
         }
     }
-    std::cout << "max:" << max_z << std::endl;
-    return max_index;
+    // std::cout << "max:" << max_z << std::endl;
+    return std::make_pair(max_index, max_z);
 }
 
 //// record the height of the vertices and their index.
@@ -98,7 +102,7 @@ std::vector<std::pair<double, int>> get_height_index(json& first_geo,json& j){
 }
 
 //// select the surface containing the roof point as the roof surfaces
-//// and the surface with the largest area as the main roof surface.
+//// and the flattest surface as the main roof surface.
 auto get_roof_surface(json& first_geo, json& j, int roof_index){
     if (first_geo["type"] == "Solid"){
         std::vector<std::pair<int, int>> surface_index;
@@ -113,27 +117,31 @@ auto get_roof_surface(json& first_geo, json& j, int roof_index){
                 }
             }
         }
-        double max_area = -INFINITY;
-        int max_index = -1;
+        // calculate the normal vector of the surface and select the flattest surface as the main roof surface.
+        double roof_normal = -INFINITY;
+        int roof_index = -1;
         for (int i = 0; i < surface_index.size(); i++) {
             int shell_index = surface_index[i].first;
             int ring_index = surface_index[i].second;
-            Polygon_2 surface_2d;
+            std::vector<Point_3> surface_3d;
             for (auto &vi_list: first_geo["boundaries"][shell_index][ring_index]) {
                 for (auto &vi: vi_list) {
                     std::vector<int> v = j["vertices"][vi.get<int>()];
                     double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
                     double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
-                    surface_2d.push_back(K::Point_2(x, y));
+                    double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                    surface_3d.emplace_back(x, y, z);
                 }
             }
-            double area = fabs(surface_2d.area());
-            if (area > max_area) {
-                max_area = area;
-                max_index = i;
+            Vector_3 normal = CGAL::unit_normal(surface_3d[0], surface_3d[1], surface_3d[2]);
+            double normal_z = fabs(normal.z()); // avoid negative value caused by wrong orientation.
+            if (normal_z > roof_normal) {
+                roof_normal = normal_z;
+                roof_index = i;
             }
         }
-        auto main_roof = first_geo["boundaries"][surface_index[max_index].first][surface_index[max_index].second];
+        //std::cout << "roof_normal:" << roof_normal << std::endl;
+        auto main_roof = first_geo["boundaries"][surface_index[roof_index].first][surface_index[roof_index].second];
         return main_roof;
     }
     else if (first_geo["type"] == "MultiSurface") {
@@ -147,26 +155,29 @@ auto get_roof_surface(json& first_geo, json& j, int roof_index){
                 }
             }
         }
-        double max_area = -INFINITY;
-        int max_index = -1;
-        for (int i = 0; i < surface_index.size(); i++) {
-            int ring_index = surface_index[i];
-            Polygon_2 surface_2d;
+
+        double roof_normal = -INFINITY;
+        int roof_index = -1;
+        for (auto & i : surface_index) {
+            int ring_index = i;
+            std::vector<Point_3> surface_3d;
             for (auto &vi_list: first_geo["boundaries"][ring_index]) {
                 for (auto &vi: vi_list) {
                     std::vector<int> v = j["vertices"][vi.get<int>()];
                     double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
                     double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
-                    surface_2d.push_back(K::Point_2(x, y));
+                    double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                    surface_3d.push_back(Point_3(x, y, z));
                 }
             }
-            double area = fabs(surface_2d.area());
-            if (area > max_area) {
-                max_area = area;
-                max_index = i;
+            Vector_3 normal = CGAL::unit_normal(surface_3d[0], surface_3d[1], surface_3d[2]);
+            double normal_z = normal.z();
+            if (normal_z > roof_normal) {
+                roof_normal = normal_z;
+                roof_index = ring_index;
             }
         }
-        auto main_roof = first_geo["boundaries"][surface_index[max_index]];
+        auto main_roof = first_geo["boundaries"][roof_index];
         return main_roof;
     }
 }
@@ -297,8 +308,8 @@ void generate_lod12(json& j){
         if (!co.value()["geometry"].empty()) {
             auto surface12 = json::array();
             auto surface_sem_index12 = json::array();
+            //// get the ground surface from lod0.2 geometry.
             for (auto &g:co.value()["geometry"]) {
-                // get the ground surface from lod0.2 geometry.
                 if (g["lod"] == "0.2") {
                     surface12 = g["boundaries"];
                     surface_sem_index12 = g["semantics"]["values"];
@@ -306,6 +317,7 @@ void generate_lod12(json& j){
                 }
             }
             json first_geo;
+            //// generate the roof surface
             for (auto &g: co.value()["geometry"]) {
                 if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
                     first_geo = g;
@@ -314,22 +326,58 @@ void generate_lod12(json& j){
             }
             // record the height of the vertices and their index.
             std::vector<std::pair<double, int>> height_index = get_height_index(first_geo, j);
-            int roof_index = roof_point(height_index,0.2);
+            int roof_index = roof_point(height_index,0.1).first;
+            double roof_z = roof_point(height_index,0.1).second;
             auto main_roof = get_roof_surface(first_geo, j, roof_index);
-            // get the lowest point of the roof surface.
-            double min_z = INFINITY;
+            // get the lowest point of the roof surface as the eave height.
+            double eave_z = INFINITY;
             for (auto &vi_list: main_roof) {
                 for (auto &vi: vi_list) {
                     int vertex_index = vi.get<int>();
                     auto &vertex = j["vertices"][vertex_index];
                     int vertex_z = vertex[2].get<int>();
                     double z = (vertex_z * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
-                    if (z < min_z) {
-                        min_z = z;
+                    if (z < eave_z) {
+                        eave_z = z;
                     }
                 }
             }
-            std::cout << "min:" << min_z << std::endl;
+            double roof_height12 = eave_z + 0.7*(roof_z - eave_z);
+
+            //// create new lod1.2 geometry
+            //// After finished the wall, the type should be "Solid"!!!! Here just for visualization
+            json new_geometry12 = {{"lod", "1.2"}, {"type", "MultiSurface"}};
+            auto sem_array12 = json::array({{{"type", "GroundSurface"}},
+                                            {{"type", "RoofSurface"}},
+                                            {{"type", "WallSurface"}}});
+            new_geometry12["semantics"]["surfaces"] = sem_array12;
+            new_geometry12["semantics"]["values"] = surface_sem_index12;
+            new_geometry12["boundaries"] = surface12;
+
+            // use ground surface to generate roof surface
+            for (auto& gs:new_geometry12["boundaries"]){
+                auto roof_surface = json::array();
+                auto& vertices = j["vertices"];
+                auto& transform = j["transform"];
+
+                for (auto& index_list : gs) {
+                    auto rf_lift = json::array();
+                    for (auto& index: index_list) {
+                        int vertex_index = index.get<int>();
+                        std::vector<int> vi = vertices[vertex_index];
+                        double z_lift = roof_height12;
+                        int z_int = std::round((z_lift - transform["translate"][2].get<double>()) / transform["scale"][2].get<double>());
+                        vertices.push_back(json::array({vi[0], vi[1], z_int}));
+                        rf_lift.push_back(vertices.size() - 1);
+                    }
+                    // roof orientation is reversed of the ground surface.
+                    std::reverse(rf_lift.begin(), rf_lift.end());
+                    roof_surface.push_back(rf_lift);
+                }
+                new_geometry12["boundaries"].push_back(roof_surface);
+                new_geometry12["semantics"]["values"].push_back(1);
+            }
+            co.value()["geometry"].push_back(new_geometry12);
         }
     }
 }
