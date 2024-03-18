@@ -24,7 +24,7 @@ void  generate_lod12(json &j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/tudcampus.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -339,18 +339,23 @@ void generate_lod12(json& j){
             continue;
         }
         if (!co.value()["geometry"].empty()) {
+            // surface12/index12:: the exterior shell of each object.
             auto surface12 = json::array();
-            auto surface_sem_index12 = json::array();
-            //// get the ground surface from lod0.2 geometry.
+            auto surface_index12 = json::array();
+            // ground_surface12/index12:: the ground surface of each object.
+            auto ground_surface12 = json::array();
+            auto shell_surface_index12 = json::array();
+            // get the ground surface from lod0.2 geometry.
             for (auto &g:co.value()["geometry"]) {
                 if (g["lod"] == "0.2") {
-                    surface12 = g["boundaries"];
-                    surface_sem_index12 = g["semantics"]["values"];
+                    ground_surface12 = g["boundaries"];
+                    shell_surface_index12 = g["semantics"]["values"];
+                    surface12.push_back(ground_surface12);
                     break;
                 }
             }
             json first_geo;
-            //// generate the roof surface
+            // generate the roof surface
             for (auto &g: co.value()["geometry"]) {
                 if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
                     first_geo = g;
@@ -377,18 +382,16 @@ void generate_lod12(json& j){
             }
             double roof_height12 = eave_z + 0.7*(roof_z - eave_z);
 
+
             //// create new lod1.2 geometry
-            //// After finished the wall, the type should be "Solid"!!!! Here just for visualization
-            json new_geometry12 = {{"lod", "1.2"}, {"type", "MultiSurface"}};
-            auto sem_array12 = json::array({{{"type", "GroundSurface"}},
+            json new_geometry12 = {{"lod", "1.2"}, {"type", "Solid"}};
+            auto sem_array12 = json::array({{{{"type", "GroundSurface"}},
                                             {{"type", "RoofSurface"}},
-                                            {{"type", "WallSurface"}}});
+                                            {{"type", "WallSurface"}}}});
             new_geometry12["semantics"]["surfaces"] = sem_array12;
-            new_geometry12["semantics"]["values"] = surface_sem_index12;
-            new_geometry12["boundaries"] = surface12;
 
             // use ground surface to generate roof surface
-            for (auto& gs:new_geometry12["boundaries"]){
+            for (auto& gs: ground_surface12){
                 auto roof_surface = json::array();
                 auto& vertices = j["vertices"];
                 auto& transform = j["transform"];
@@ -406,10 +409,13 @@ void generate_lod12(json& j){
                     // roof orientation is reversed of the ground surface.
                     std::reverse(rf_lift.begin(), rf_lift.end());
                     roof_surface.push_back(rf_lift);
+                    shell_surface_index12.push_back(1);
                 }
-                new_geometry12["boundaries"].push_back(roof_surface);
-                new_geometry12["semantics"]["values"].push_back(1);
+                surface12.push_back(roof_surface);
+                surface_index12.push_back(shell_surface_index12);
             }
+            new_geometry12["boundaries"] = surface12;
+            new_geometry12["semantics"]["values"] = surface_index12;
             co.value()["geometry"].push_back(new_geometry12);
         }
     }
