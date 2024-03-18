@@ -41,6 +41,36 @@ int main(int argc, const char * argv[]) {
   return 0;
 }
 
+//// orient the surface by the area of the outer ring and the inner ring.
+void orient_test(json& j, json& surface) {
+    Polygon_2  outer_ring;
+    auto& outer_boundary = surface[0];
+    for (auto& vi : outer_boundary) {
+        std::vector<int> v = j["vertices"][vi.get<int>()];
+        double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
+        double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
+        outer_ring.push_back(K::Point_2(x, y));
+    }
+    if (outer_ring.area() > 0) {
+        std::reverse(outer_boundary.begin(), outer_boundary.end());
+    }
+
+    if (surface.size() > 1) {
+        for (int i = 1; i < surface.size(); i++) {
+            auto& inner_boundary = surface[i];
+            Polygon_2 inner_ring;
+            for (auto& vi : inner_boundary) {
+                std::vector<int> v = j["vertices"][vi.get<int>()];
+                double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
+                double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
+                inner_ring.push_back(K::Point_2(x, y));
+            }
+            if (inner_ring.area() < 0) {
+                std::reverse(surface[i].begin(), surface[i].end());
+            }
+        }
+    }
+}
 
 //// remove the boundary vertices with 10% of the highest z value.
 //// find the highest z value/index of the left vertices as the roof point.
@@ -99,6 +129,73 @@ std::vector<std::pair<double, int>> get_height_index(json& first_geo,json& j){
         }
     }
     return height_index;
+}
+
+//// select the ground surface using mean z-value, instead of referring to semantics.
+//// ground surface is identified by the lowest mean z-value and the largest area.
+void get_ground_surface(json& j, json& first_geo, json& ground_surface, json& ground_surface_sem_index) {
+    int shell_index = -1;
+    int ring_index = -1;
+    double z_mean = INFINITY;
+    double area = -INFINITY;
+
+    if (first_geo["type"] == "Solid") {
+        for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+            for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
+                double surface_sum_z = 0;
+                int surface_num_vi = 0;
+                Polygon_2 surface_2d; // contains x and y coordinates of the outer boundary of the original surface.
+                auto& outer_boundary = first_geo["boundaries"][i][k][0];
+                for (auto& vi : outer_boundary) {
+                    std::vector<int> v = j["vertices"][vi.get<int>()];
+                    double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
+                    double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
+                    double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                    surface_2d.push_back(K::Point_2(x, y));
+                    surface_sum_z += z;
+                    surface_num_vi += 1;
+                }
+                double surface_mean_z = surface_sum_z / surface_num_vi;
+                double surface_2d_area = fabs(surface_2d.area());
+                if (surface_mean_z < z_mean && surface_2d_area >= area) {
+                    shell_index = i;
+                    ring_index = k;
+                    z_mean = surface_mean_z;
+                    area = surface_2d_area;
+                }
+            }
+        }
+        orient_test(j, first_geo["boundaries"][shell_index][ring_index]);
+        ground_surface.push_back(first_geo["boundaries"][shell_index][ring_index]);
+        ground_surface_sem_index.push_back(0);
+    }
+    else if (first_geo["type"] == "MultiSurface") {
+        for (int i = 0; i < first_geo["boundaries"].size(); i++) {
+            double surface_sum_z = 0;
+            int surface_num_vi = 0;
+            Polygon_2 surface_2d;
+            auto& outer_boundary = first_geo["boundaries"][i][0];
+            for (auto& vi : outer_boundary) {
+                std::vector<int> v = j["vertices"][vi.get<int>()];
+                double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
+                double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
+                double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
+                surface_2d.push_back(K::Point_2(x, y));
+                surface_sum_z += z;
+                surface_num_vi += 1;
+            }
+            double surface_mean_z = surface_sum_z / surface_num_vi;
+            double surface_2d_area = fabs(surface_2d.area());
+            if (surface_mean_z <= z_mean && surface_2d_area >= area) {
+                ring_index = i;
+                z_mean = surface_mean_z;
+                area = surface_2d_area;
+            }
+        }
+        orient_test(j, first_geo["boundaries"][ring_index]);
+        ground_surface.push_back(first_geo["boundaries"][ring_index]);
+        ground_surface_sem_index.push_back(0);
+    }
 }
 
 //// select the surface containing the roof point as the roof surfaces
@@ -184,113 +281,49 @@ auto get_roof_surface(json& first_geo, json& j, int roof_index){
 
 //// generate LoD0.2 geometry
 void generate_lod02(json& j) {
-  for (auto& co : j["CityObjects"].items()) {
-    // if an CityObject already has lod0.2, do nothing and skip.
-    bool lod02_exist = false;
-    for (auto& g : co.value()["geometry"]) {
-      if (g["lod"] == "0.2") {
-        lod02_exist = true;
-        break;
-      }
-    }
-    if (lod02_exist) {
-      std::cout << "This CityObject already contains LoD0.2 geometry, skip." << std::endl;
-      continue;
-    }
-
-    if (!co.value()["geometry"].empty()) {
-      // initialize ground surface array and ground surface semantic index array.
-      auto ground_surface = json::array();
-      auto ground_surface_sem_index = json::array();
-
-      // get the first geometry which has the type "Solid" or "MultiSurface",
-      // use this to generate lod0.2.
-      json first_geo;
-      for (auto& g : co.value()["geometry"]) {
-        if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
-          first_geo = g;
-          break;
+    for (auto& co : j["CityObjects"].items()) {
+        // if an CityObject already has lod0.2, do nothing and skip.
+        bool lod02_exist = false;
+        for (auto& g : co.value()["geometry"]) {
+            if (g["lod"] == "0.2") {
+                lod02_exist = true;
+                break;
+            }
         }
-      }
-
-      // get ground surfaces using mean z-value, instead of referring to semantics.
-      // ground surface is identified by the lowest mean z-value and the largest area.
-      int shell_index = -1;
-      int ring_index = -1;
-      double z_mean = INFINITY;
-      double area = -INFINITY;
-
-      if (first_geo["type"] == "Solid") {
-        for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-          for (int k = 0; k < first_geo["boundaries"][i].size(); k++) {
-            double surface_sum_z = 0;
-            int surface_num_vi = 0;
-            Polygon_2 surface_2d; // this 2d surface only contains x and y coordinates of the original surface.
-
-            for (auto&vi_list : first_geo["boundaries"][i][k]) {
-              for (auto& vi : vi_list) {
-                std::vector<int> v = j["vertices"][vi.get<int>()];
-                double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
-                double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
-                double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
-                surface_2d.push_back(K::Point_2(x, y));
-                surface_sum_z += z;
-                surface_num_vi += 1;
-              }
-            }
-            double surface_mean_z = surface_sum_z / surface_num_vi;
-            double surface_2d_area = fabs(surface_2d.area());
-            if (surface_mean_z < z_mean && surface_2d_area > area) {
-              shell_index = i;
-              ring_index = k;
-              z_mean = surface_mean_z;
-              area = surface_2d_area;
-            }
-          }
+        if (lod02_exist) {
+            std::cout << "This CityObject already contains LoD0.2 geometry, skip." << std::endl;
+            continue;
         }
-      ground_surface.push_back(first_geo["boundaries"][shell_index][ring_index]);
-      ground_surface_sem_index.push_back(0);
-      }
-      else if (first_geo["type"] == "MultiSurface") {
-          for (int i = 0; i < first_geo["boundaries"].size(); i++) {
-            double surface_sum_z = 0;
-            int surface_num_vi = 0;
-            Polygon_2 surface_2d;
 
-            for (auto&vi_list : first_geo["boundaries"][i]) {
-              for (auto& vi : vi_list) {
-                  std::vector<int> v = j["vertices"][vi.get<int>()];
-                  double x = (v[0] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][0].get<double>();
-                  double y = (v[1] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][1].get<double>();
-                  double z = (v[2] * j["transform"]["scale"][2].get<double>()) + j["transform"]["translate"][2].get<double>();
-                  surface_2d.push_back(K::Point_2(x, y));
-                  surface_sum_z += z;
-                  surface_num_vi += 1;
-              }
-            }
-            double surface_mean_z = surface_sum_z / surface_num_vi;
-            double surface_2d_area = fabs(surface_2d.area());
-            if (surface_mean_z <= z_mean && surface_2d_area >= area) {
-              ring_index = i;
-              z_mean = surface_mean_z;
-              area = surface_2d_area;
-            }
-          }
-          ground_surface.push_back(first_geo["boundaries"][ring_index]);
-          ground_surface_sem_index.push_back(0);
-      }
+        if (!co.value()["geometry"].empty()) {
+            // initialize ground surface array and ground surface semantic index array.
+            auto ground_surface = json::array();
+            auto ground_surface_sem_index = json::array();
 
-      // create new lod0.2 geometry
-      json new_geometry = {{"lod", "0.2"}, {"type", "MultiSurface"}};
-      auto sem_array = json::array({{{"type", "GroundSurface"}}, {{"type", "RoofSurface"}}});
-      new_geometry["semantics"]["surfaces"] = sem_array;
-      new_geometry["semantics"]["values"] = ground_surface_sem_index;
-      new_geometry["boundaries"] = ground_surface;
-      co.value()["geometry"].push_back(new_geometry);
+            // get the first geometry which has the type "Solid" or "MultiSurface", use this to generate lod0.2.
+            json first_geo;
+            for (auto& g : co.value()["geometry"]) {
+                if (g["type"] == "Solid" | g["type"] == "MultiSurface") {
+                    first_geo = g;
+                    break;
+                }
+            }
+
+            // get ground surfaces using mean z-value, instead of referring to semantics.
+            get_ground_surface(j, first_geo, ground_surface, ground_surface_sem_index);
+
+            // create new lod0.2 geometry
+            json new_geometry = {{"lod", "0.2"}, {"type", "MultiSurface"}};
+            auto sem_array = json::array({{{"type", "GroundSurface"}}});
+            new_geometry["semantics"]["surfaces"] = sem_array;
+            new_geometry["semantics"]["values"] = ground_surface_sem_index;
+            new_geometry["boundaries"] = ground_surface;
+            co.value()["geometry"].push_back(new_geometry);
+        }
     }
-  }
 }
 
+//// generate LoD1.2 geometry
 void generate_lod12(json& j){
     for (auto& co : j["CityObjects"].items()) {
         // if an CityObject already has lod1.2, do nothing and skip.
