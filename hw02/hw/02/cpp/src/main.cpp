@@ -24,7 +24,7 @@ void  generate_lod12(json &j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/specialcase_3.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -343,14 +343,15 @@ void generate_lod12(json& j){
             auto surface12 = json::array();
             auto surface_index12 = json::array();
             // ground_surface12/index12:: the ground surface of each object.
-            auto ground_surface12 = json::array();
+            auto shell_surface12 = json::array();
             auto shell_surface_index12 = json::array();
+            auto ground_surface12 = json::array();
             // get the ground surface from lod0.2 geometry.
             for (auto &g:co.value()["geometry"]) {
                 if (g["lod"] == "0.2") {
-                    ground_surface12 = g["boundaries"];
+                    ground_surface12 = g["boundaries"]; // used for iterating later
+                    shell_surface12 = g["boundaries"];
                     shell_surface_index12 = g["semantics"]["values"];
-                    surface12.push_back(ground_surface12);
                     break;
                 }
             }
@@ -392,8 +393,7 @@ void generate_lod12(json& j){
 
             // use ground surface to generate roof surface
             for (auto& gs: ground_surface12){
-                auto all_roof_surface = json::array();//store all the roof surfaces
-                auto roof_surface = json::array();//store the roof surface
+                auto roof_surface = json::array();
                 auto& vertices = j["vertices"];
                 auto& transform = j["transform"];
 
@@ -410,10 +410,10 @@ void generate_lod12(json& j){
                     // roof orientation is reversed of the ground surface.
                     std::reverse(rf_lift.begin(), rf_lift.end());
                     roof_surface.push_back(rf_lift);
-                    all_roof_surface.push_back(roof_surface);
+                    shell_surface12.push_back(roof_surface);
                     shell_surface_index12.push_back(1);
                 }
-                surface12.push_back(all_roof_surface);
+                surface12.push_back(shell_surface12);
                 surface_index12.push_back(shell_surface_index12);
             }
             new_geometry12["boundaries"] = surface12;
