@@ -24,7 +24,7 @@ void  generate_lod12(json &j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/specialcase_3.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -385,14 +385,15 @@ void generate_lod12(json& j){
 
             //// create new lod1.2 geometry
             json new_geometry12 = {{"lod", "1.2"}, {"type", "Solid"}};
-            auto sem_array12 = json::array({{{{"type", "GroundSurface"}},
+            auto sem_array12 = json::array({{{"type", "GroundSurface"}},
                                             {{"type", "RoofSurface"}},
-                                            {{"type", "WallSurface"}}}});
+                                            {{"type", "WallSurface"}}});
             new_geometry12["semantics"]["surfaces"] = sem_array12;
 
             // use ground surface to generate roof surface
             for (auto& gs: ground_surface12){
-                auto roof_surface = json::array();
+                auto all_roof_surface = json::array();//store all the roof surfaces
+                auto roof_surface = json::array();//store the roof surface
                 auto& vertices = j["vertices"];
                 auto& transform = j["transform"];
 
@@ -409,9 +410,10 @@ void generate_lod12(json& j){
                     // roof orientation is reversed of the ground surface.
                     std::reverse(rf_lift.begin(), rf_lift.end());
                     roof_surface.push_back(rf_lift);
+                    all_roof_surface.push_back(roof_surface);
                     shell_surface_index12.push_back(1);
                 }
-                surface12.push_back(roof_surface);
+                surface12.push_back(all_roof_surface);
                 surface_index12.push_back(shell_surface_index12);
             }
             new_geometry12["boundaries"] = surface12;
