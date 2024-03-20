@@ -24,7 +24,7 @@ void  generate_lod12(json &j);
 
 int main(int argc, const char * argv[]) {
   //-- will read the file passed as argument or twobuildings.city.json if nothing is passed
-  const char* filename = (argc > 1) ? argv[1] : "../../data/twobuildings.city.json";
+  const char* filename = (argc > 1) ? argv[1] : "../../data/tudcampus.city.json";
   std::cout << "Processing: " << filename << std::endl;
   std::ifstream input(filename);
   json j;
@@ -412,6 +412,53 @@ void generate_lod12(json& j){
                     roof_surface.push_back(rf_lift);
                     shell_surface12.push_back(roof_surface);
                     shell_surface_index12.push_back(1);
+                }
+            }
+
+            //generate wall surfaces
+            for (auto& gs: ground_surface12){
+                //auto wall_surface = json::array();
+                auto& vertices = j["vertices"];
+
+                for (auto& index_list : gs) {
+
+                    for (size_t i = 0; i < index_list.size(); ++i) {
+                        size_t next_i = (i + 1) % index_list.size(); // Circular loop
+
+                        // Get ground vertex indices
+                        int ground_vertex_index = index_list[i].get<int>();
+                        int next_ground_vertex_index = index_list[next_i].get<int>();
+
+                        // Fetch the vertex coordinates from the JSON structure
+                        auto ground_vertex = vertices[ground_vertex_index];
+                        auto next_ground_vertex = vertices[next_ground_vertex_index];
+
+                        // Initialize roof vertex indices to be found
+                        int roof_vertex_index = -1, next_roof_vertex_index = -1;
+
+                        // Find the corresponding roof vertex by matching x and y
+                        for (size_t v_idx = 0; v_idx < vertices.size(); ++v_idx) {
+                            auto& vertex = vertices[v_idx];
+                            if (vertex[0] == ground_vertex[0] && vertex[1] == ground_vertex[1] && v_idx != ground_vertex_index) {
+                                roof_vertex_index = v_idx;
+                            }
+                            if (vertex[0] == next_ground_vertex[0] && vertex[1] == next_ground_vertex[1] && v_idx != next_ground_vertex_index) {
+                                next_roof_vertex_index = v_idx;
+                            }
+                        }
+
+                        // Ensure both corresponding roof vertices were found
+                        if (roof_vertex_index != -1 && next_roof_vertex_index != -1) {
+                            // Construct wall using ground and roof vertices, orientation also should be correct
+                            json wall = json::array({ground_vertex_index, roof_vertex_index, next_roof_vertex_index, next_ground_vertex_index});
+                            json wrapped_wall = json::array({wall});
+
+                            // Add the wrapped wall surface to shell_surface12
+                            shell_surface12.push_back(wrapped_wall);
+                            shell_surface_index12.push_back(2);
+                        }
+                    }
+
                 }
                 surface12.push_back(shell_surface12);
                 surface_index12.push_back(shell_surface_index12);
